@@ -26,6 +26,12 @@ export const TappitBoard = () => {
 		setPhrase([]);
 	};
 
+	const speakPhrase = () => {
+		if (phrase.length === 0) return;
+		const utterance = new SpeechSynthesisUtterance(phrase.join(" "));
+		window.speechSynthesis.speak(utterance);
+	};
+
 	return (
 		<div style={styles.wrapper}>
 			<div style={styles.grid}>
@@ -46,9 +52,22 @@ export const TappitBoard = () => {
 				{phrase.length > 0 ? phrase.join(" ") : "Tap a symbol to start..."}
 			</div>
 
-			<button type="button" onClick={clearPhrase} style={styles.clearButton}>
-				Clear
-			</button>
+			<div style={styles.buttonRow}>
+				<button
+					type="button"
+					onClick={speakPhrase}
+					disabled={phrase.length === 0}
+					style={{
+						...styles.speakButton,
+						...(phrase.length === 0 ? styles.speakButtonDisabled : {})
+					}}
+				>
+					Speak 🔊
+				</button>
+				<button type="button" onClick={clearPhrase} style={styles.clearButton}>
+					Clear
+				</button>
+			</div>
 		</div>
 	);
 };
@@ -98,8 +117,29 @@ const styles = {
 		fontSize: "1rem",
 		fontWeight: "500"
 	},
-	clearButton: {
+	buttonRow: {
 		marginTop: "0.75rem",
+		display: "flex",
+		gap: "0.75rem",
+		alignItems: "center",
+		flexWrap: "wrap"
+	},
+	speakButton: {
+		minWidth: "80px",
+		minHeight: "80px",
+		padding: "0.5rem",
+		border: "2px solid #d97706",
+		borderRadius: "8px",
+		backgroundColor: "#fbbf24",
+		color: "#422006",
+		fontWeight: "700",
+		cursor: "pointer"
+	},
+	speakButtonDisabled: {
+		opacity: 0.5,
+		cursor: "not-allowed"
+	},
+	clearButton: {
 		padding: "0.6rem 1rem",
 		border: "2px solid #1f2937",
 		borderRadius: "8px",
