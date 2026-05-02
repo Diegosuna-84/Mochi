@@ -15,6 +15,12 @@ const SYMBOLS = [
 	{ word: "Food", emoji: "🍽️" }
 ];
 
+const quickTappits = [
+	{ word: "Help", emoji: "🆘" },
+	{ word: "Bathroom", emoji: "🚽" },
+	{ word: "Break", emoji: "☕" }
+];
+
 export const TappitBoard = () => {
 	const [phrase, setPhrase] = useState([]);
 
@@ -32,8 +38,32 @@ export const TappitBoard = () => {
 		window.speechSynthesis.speak(utterance);
 	};
 
+	const speakQuickWord = (word) => {
+		const utterance = new SpeechSynthesisUtterance(word);
+		window.speechSynthesis.speak(utterance);
+	};
+
 	return (
 		<div style={styles.wrapper}>
+			<section style={styles.quickSection} aria-labelledby="quick-tappit-heading">
+				<h2 id="quick-tappit-heading" style={styles.quickSectionHeading}>
+					Quick Tappit
+				</h2>
+				<div style={styles.quickRow}>
+					{quickTappits.map((item) => (
+						<button
+							key={item.word}
+							type="button"
+							onClick={() => speakQuickWord(item.word)}
+							style={styles.quickButton}
+						>
+							<span style={styles.emoji}>{item.emoji}</span>
+							<span style={styles.quickWord}>{item.word}</span>
+						</button>
+					))}
+				</div>
+			</section>
+
 			<div style={styles.grid}>
 				{SYMBOLS.map((symbol) => (
 					<button
@@ -77,6 +107,41 @@ const styles = {
 		maxWidth: "680px",
 		margin: "0 auto",
 		padding: "1rem"
+	},
+	quickSection: {
+		marginBottom: "1rem"
+	},
+	quickSectionHeading: {
+		margin: "0 0 0.5rem 0",
+		fontSize: "1.125rem",
+		fontWeight: "700",
+		color: "#111111"
+	},
+	quickRow: {
+		display: "flex",
+		flexWrap: "wrap",
+		gap: "0.75rem",
+		alignItems: "center"
+	},
+	quickButton: {
+		minHeight: "80px",
+		minWidth: "80px",
+		padding: "0.5rem",
+		border: "2px solid #c2410c",
+		borderRadius: "10px",
+		backgroundColor: "#fed7aa",
+		color: "#431407",
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+		justifyContent: "center",
+		cursor: "pointer",
+		fontWeight: "700"
+	},
+	quickWord: {
+		marginTop: "0.25rem",
+		fontSize: "0.95rem",
+		fontWeight: "700"
 	},
 	grid: {
 		display: "grid",
