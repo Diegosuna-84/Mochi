@@ -12,7 +12,14 @@ const SYMBOLS = [
 	{ word: "Home", emoji: "🏠" },
 	{ word: "Happy", emoji: "😊" },
 	{ word: "Sad", emoji: "😢" },
-	{ word: "Food", emoji: "🍽️" }
+	{ word: "Food", emoji: "🍽️" },
+	{ word: "Give", emoji: "🤲" },
+	{ word: "Me", emoji: "👤" },
+	{ word: "More", emoji: "🔁" },
+	{ word: "I", emoji: "👁️" },
+	{ word: "Want", emoji: "🙋" },
+	{ word: "Stop", emoji: "✋" },
+	{ word: "Done", emoji: "🏁" },
 ];
 
 const quickTappits = [
