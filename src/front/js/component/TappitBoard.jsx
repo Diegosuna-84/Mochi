@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const SYMBOLS = [
 	{ word: "Apple", emoji: "🍎" },
@@ -30,6 +30,15 @@ const quickTappits = [
 
 export const TappitBoard = () => {
 	const [phrase, setPhrase] = useState([]);
+	const defaultProfile = { name: "", ageGroup: "", voicePreference: "" };
+	const [profile, setProfile] = useState(() => {
+    const saved = localStorage.getItem("mochiProfile");
+    return saved ? JSON.parse(saved) : defaultProfile;
+});
+
+useEffect(() => {
+    localStorage.setItem("mochiProfile", JSON.stringify(profile));
+}, [profile]);
 
 	const handleSymbolClick = (word) => {
 		setPhrase((currentPhrase) => [...currentPhrase, word]);
