@@ -20,3 +20,27 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+@api.route('/profile', methods=['POST'])
+def save_profile():
+    body = request.get_json()
+
+    if not body:
+        return jsonify({"error": "No data provided"}), 400
+
+    name = body.get("name", "")
+    age_group = body.get("ageGroup", "")
+    voice_preference = body.get("voicePreference", "")
+
+    from api.models import Profile
+
+    profile = Profile(
+        name=name,
+        age_group=age_group,
+        voice_preference=voice_preference
+    )
+
+    db.session.add(profile)
+    db.session.commit()
+
+    return jsonify(profile.serialize()), 201
