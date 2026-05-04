@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { DrawingArea } from "./DrawingArea";
 
 const SYMBOLS = [
 	{ word: "Apple", emoji: "🍎" },
@@ -30,6 +31,7 @@ const quickTappits = [
 
 export const TappitBoard = () => {
 	const [phrase, setPhrase] = useState([]);
+	const [showDrawing, setShowDrawing] = useState(false);
 	const defaultProfile = { name: "", ageGroup: "", voicePreference: "" };
 	const [profile, setProfile] = useState(() => {
 		const saved = localStorage.getItem("mochiProfile");
@@ -76,6 +78,10 @@ export const TappitBoard = () => {
 		const utterance = new SpeechSynthesisUtterance(word);
 		window.speechSynthesis.speak(utterance);
 	};
+
+	if (showDrawing) {
+		return <DrawingArea onBack={() => setShowDrawing(false)} />;
+	}
 
 	return (
 		<div style={styles.wrapper}>
@@ -130,6 +136,13 @@ export const TappitBoard = () => {
 				</button>
 				<button type="button" onClick={clearPhrase} style={styles.clearButton}>
 					Clear
+				</button>
+				<button
+					type="button"
+					onClick={() => setShowDrawing(true)}
+					style={styles.drawButton}
+				>
+					✏️ Draw
 				</button>
 			</div>
 		</div>
@@ -246,5 +259,16 @@ const styles = {
 		color: "#111111",
 		fontWeight: "700",
 		cursor: "pointer"
-	}
+	},
+	drawButton: {
+		minWidth: "80px",
+		minHeight: "80px",
+		padding: "0.5rem",
+		border: "2px solid #7c3aed",
+		borderRadius: "8px",
+		backgroundColor: "#ede9fe",
+		color: "#3b0764",
+		fontWeight: "700",
+		cursor: "pointer"
+	},
 };
