@@ -32,13 +32,31 @@ export const TappitBoard = () => {
 	const [phrase, setPhrase] = useState([]);
 	const defaultProfile = { name: "", ageGroup: "", voicePreference: "" };
 	const [profile, setProfile] = useState(() => {
-    const saved = localStorage.getItem("mochiProfile");
-    return saved ? JSON.parse(saved) : defaultProfile;
-});
+		const saved = localStorage.getItem("mochiProfile");
+		return saved ? JSON.parse(saved) : defaultProfile;
+	});
 
-useEffect(() => {
-    localStorage.setItem("mochiProfile", JSON.stringify(profile));
-}, [profile]);
+	useEffect(() => {
+		localStorage.setItem("mochiProfile", JSON.stringify(profile));
+	}, [profile]);
+
+	const syncProfile = async (updatedProfile) => {
+		try {
+			await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/profile`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(updatedProfile)
+			});
+		} catch (error) {
+			console.log("Profile sync skipped. App still works offline.");
+		}
+	};
+
+	const saveProfile = (updatedProfile) => {
+		setProfile(updatedProfile);
+		localStorage.setItem("mochiProfile", JSON.stringify(updatedProfile));
+		syncProfile(updatedProfile);
+	};
 
 	const handleSymbolClick = (word) => {
 		setPhrase((currentPhrase) => [...currentPhrase, word]);
