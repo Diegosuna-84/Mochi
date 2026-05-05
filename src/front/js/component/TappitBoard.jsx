@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DrawingArea } from "./DrawingArea";
+import { CalmCorner } from "./CalmCorner";
+
 
 const SYMBOLS = [
 	{ word: "Apple", emoji: "🍎" },
@@ -32,6 +34,7 @@ const quickTappits = [
 export const TappitBoard = () => {
 	const [phrase, setPhrase] = useState([]);
 	const [showDrawing, setShowDrawing] = useState(false);
+	const [showCalm, setShowCalm] = useState(false);
 	const defaultProfile = { name: "", ageGroup: "", voicePreference: "" };
 	const [profile, setProfile] = useState(() => {
 		const saved = localStorage.getItem("mochiProfile");
@@ -81,6 +84,10 @@ export const TappitBoard = () => {
 
 	if (showDrawing) {
 		return <DrawingArea onBack={() => setShowDrawing(false)} />;
+	};
+
+	if (showCalm) {
+		return <CalmCorner onBack={() => setShowCalm(false)} />;
 	}
 
 	return (
@@ -143,6 +150,13 @@ export const TappitBoard = () => {
 					style={styles.drawButton}
 				>
 					✏️ Draw
+				</button>
+				<button
+					type="button"
+					onClick={() => setShowCalm(true)}
+					style={styles.calmButton}
+				>
+					🌿 Calm
 				</button>
 			</div>
 		</div>
@@ -268,6 +282,17 @@ const styles = {
 		borderRadius: "8px",
 		backgroundColor: "#ede9fe",
 		color: "#3b0764",
+		fontWeight: "700",
+		cursor: "pointer"
+	},
+	calmButton: {
+		minWidth: "80px",
+		minHeight: "80px",
+		padding: "0.5rem",
+		border: "2px solid #059669",
+		borderRadius: "8px",
+		backgroundColor: "#d1fae5",
+		color: "#064e3b",
 		fontWeight: "700",
 		cursor: "pointer"
 	},
