@@ -2,39 +2,83 @@ import React, { useState, useEffect } from "react";
 import { DrawingArea } from "./DrawingArea";
 import { CalmCorner } from "./CalmCorner";
 
+const THEMES = {
+	blue:  { bg: "#e0f2fe", card: "#ffffff", text: "#111111", border: "#7dd3fc", heading: "#0369a1" },
+	pink:  { bg: "#fce7f3", card: "#ffffff", text: "#111111", border: "#f9a8d4", heading: "#9d174d" },
+	white: { bg: "#ffffff", card: "#f9fafb", text: "#111111", border: "#d1d5db", heading: "#111111" },
+	dark:  { bg: "#1e1e2e", card: "#2e2e3e", text: "#ffffff", border: "#4b5563", heading: "#93c5fd" },
+};
 
-const SYMBOLS = [
-	{ word: "Apple", emoji: "🍎" },
-	{ word: "Drink", emoji: "🥤" },
-	{ word: "Bathroom", emoji: "🚽" },
-	{ word: "Tired", emoji: "😴" },
-	{ word: "Hurt", emoji: "🤕" },
-	{ word: "Please", emoji: "🙏" },
-	{ word: "Yes", emoji: "✅" },
-	{ word: "No", emoji: "❌" },
-	{ word: "Home", emoji: "🏠" },
-	{ word: "Happy", emoji: "😊" },
-	{ word: "Sad", emoji: "😢" },
-	{ word: "Food", emoji: "🍽️" },
-	{ word: "Give", emoji: "🤲" },
-	{ word: "Me", emoji: "👤" },
-	{ word: "More", emoji: "🔁" },
-	{ word: "I", emoji: "👁️" },
-	{ word: "Want", emoji: "🙋" },
-	{ word: "Stop", emoji: "✋" },
-	{ word: "Done", emoji: "🏁" },
+const CATEGORIES = [
+	{
+		label: "🗣️ Core Words",
+		symbols: [
+			{ word: "I", emoji: "👁️" },
+			{ word: "Want", emoji: "🙋" },
+			{ word: "More", emoji: "🔁" },
+			{ word: "Give", emoji: "🤲" },
+			{ word: "Me", emoji: "👤" },
+			{ word: "Please", emoji: "🙏" },
+			{ word: "Yes", emoji: "✅" },
+			{ word: "No", emoji: "❌" },
+			{ word: "Stop", emoji: "✋" },
+			{ word: "Done", emoji: "🏁" },
+			{ word: "Help", emoji: "🆘" },
+			{ word: "Hot", emoji: "🔥" },
+			{ word: "Cold", emoji: "🧊" },
+		]
+	},
+	{
+		label: "🍎 Food & Drink",
+		symbols: [
+			{ word: "Apple", emoji: "🍎" },
+			{ word: "Banana", emoji: "🍌" },
+			{ word: "Pizza", emoji: "🍕" },
+			{ word: "Chicken", emoji: "🍗" },
+			{ word: "Sandwich", emoji: "🥪" },
+			{ word: "Bread", emoji: "🍞" },
+			{ word: "Ice Cream", emoji: "🍦" },
+			{ word: "Drink", emoji: "🥤" },
+			{ word: "Milk", emoji: "🥛" },
+			{ word: "Food", emoji: "🍽️" },
+		]
+	},
+	{
+		label: "😊 Feelings",
+		symbols: [
+			{ word: "Happy", emoji: "😊" },
+			{ word: "Sad", emoji: "😢" },
+			{ word: "Tired", emoji: "😴" },
+			{ word: "Hurt", emoji: "🤕" },
+		]
+	},
+	{
+		label: "🏠 Places & Things",
+		symbols: [
+			{ word: "Home", emoji: "🏠" },
+			{ word: "School", emoji: "🏫" },
+			{ word: "Park", emoji: "🌳" },
+			{ word: "Bathroom", emoji: "🚽" },
+			{ word: "Outside", emoji: "🌤️" },
+			{ word: "Inside", emoji: "🏡" },
+			{ word: "Break", emoji: "☕" },
+		]
+	},
 ];
 
 const quickTappits = [
 	{ word: "Help", emoji: "🆘" },
 	{ word: "Bathroom", emoji: "🚽" },
-	{ word: "Break", emoji: "☕" }
+	{ word: "Break", emoji: "☕" },
 ];
 
 export const TappitBoard = () => {
 	const [phrase, setPhrase] = useState([]);
 	const [showDrawing, setShowDrawing] = useState(false);
 	const [showCalm, setShowCalm] = useState(false);
+	const [theme, setTheme] = useState("blue");
+	const t = THEMES[theme];
+
 	const defaultProfile = { name: "", ageGroup: "", voicePreference: "" };
 	const [profile, setProfile] = useState(() => {
 		const saved = localStorage.getItem("mochiProfile");
@@ -64,12 +108,10 @@ export const TappitBoard = () => {
 	};
 
 	const handleSymbolClick = (word) => {
-		setPhrase((currentPhrase) => [...currentPhrase, word]);
+		setPhrase((cur) => [...cur, word]);
 	};
 
-	const clearPhrase = () => {
-		setPhrase([]);
-	};
+	const clearPhrase = () => setPhrase([]);
 
 	const speakPhrase = () => {
 		if (phrase.length === 0) return;
@@ -82,53 +124,89 @@ export const TappitBoard = () => {
 		window.speechSynthesis.speak(utterance);
 	};
 
-	if (showDrawing) {
-		return <DrawingArea onBack={() => setShowDrawing(false)} />;
-	};
-
-	if (showCalm) {
-		return <CalmCorner onBack={() => setShowCalm(false)} />;
-	}
+	if (showDrawing) return <DrawingArea onBack={() => setShowDrawing(false)} />;
+	if (showCalm) return <CalmCorner onBack={() => setShowCalm(false)} />;
 
 	return (
-		<div style={styles.wrapper}>
-			<section style={styles.quickSection} aria-labelledby="quick-tappit-heading">
-				<h2 id="quick-tappit-heading" style={styles.quickSectionHeading}>
-					Quick Tappit
-				</h2>
+		<div style={{ ...styles.wrapper, backgroundColor: t.bg }}>
+
+			{/* Theme Switcher */}
+			<div style={styles.themeRow}>
+				{Object.keys(THEMES).map((key) => (
+					<button
+						key={key}
+						onClick={() => setTheme(key)}
+						style={{
+							...styles.themeButton,
+							backgroundColor: THEMES[key].bg,
+							border: theme === key ? `3px solid ${t.heading}` : "3px solid transparent",
+							color: THEMES[key].text,
+						}}
+					>
+						{key === "blue" ? "☀️" : key === "pink" ? "🌸" : key === "white" ? "⬜" : "🌙"}
+					</button>
+				))}
+			</div>
+
+			{/* Quick Tappit */}
+			<section style={styles.quickSection}>
+				<h2 style={{ ...styles.sectionHeading, color: t.heading }}>Quick Tappit</h2>
 				<div style={styles.quickRow}>
 					{quickTappits.map((item) => (
 						<button
 							key={item.word}
 							type="button"
 							onClick={() => speakQuickWord(item.word)}
-							style={styles.quickButton}
+							style={{
+								...styles.symbolButton,
+								backgroundColor: "#fed7aa",
+								border: `2px solid #c2410c`,
+								color: "#431407",
+							}}
 						>
 							<span style={styles.emoji}>{item.emoji}</span>
-							<span style={styles.quickWord}>{item.word}</span>
+							<span style={styles.word}>{item.word}</span>
 						</button>
 					))}
 				</div>
 			</section>
 
-			<div style={styles.grid}>
-				{SYMBOLS.map((symbol) => (
-					<button
-						key={symbol.word}
-						type="button"
-						onClick={() => handleSymbolClick(symbol.word)}
-						style={styles.symbolButton}
-					>
-						<span style={styles.emoji}>{symbol.emoji}</span>
-						<span style={styles.word}>{symbol.word}</span>
-					</button>
-				))}
-			</div>
+			{/* Categories */}
+			{CATEGORIES.map((cat) => (
+				<section key={cat.label} style={styles.categorySection}>
+					<h2 style={{ ...styles.sectionHeading, color: t.heading }}>{cat.label}</h2>
+					<div style={styles.grid}>
+						{cat.symbols.map((symbol) => (
+							<button
+								key={symbol.word}
+								type="button"
+								onClick={() => handleSymbolClick(symbol.word)}
+								style={{
+									...styles.symbolButton,
+									backgroundColor: t.card,
+									border: `2px solid ${t.border}`,
+									color: t.text,
+								}}
+							>
+								<span style={styles.emoji}>{symbol.emoji}</span>
+								<span style={styles.word}>{symbol.word}</span>
+							</button>
+						))}
+					</div>
+				</section>
+			))}
 
-			<div style={styles.tappitBar}>
+			{/* Tappit Bar */}
+			<div style={{
+				...styles.tappitBar,
+				backgroundColor: t.card,
+				border: `2px solid ${t.border}`,
+				color: t.text,
+			}}>
 				{phrase.length > 0 ? phrase.join(" ") : "Tap a symbol to start..."}
 			</div>
 
+			{/* Action Buttons */}
 			<div style={styles.buttonRow}>
 				<button
 					type="button"
@@ -144,18 +222,10 @@ export const TappitBoard = () => {
 				<button type="button" onClick={clearPhrase} style={styles.clearButton}>
 					Clear
 				</button>
-				<button
-					type="button"
-					onClick={() => setShowDrawing(true)}
-					style={styles.drawButton}
-				>
+				<button type="button" onClick={() => setShowDrawing(true)} style={styles.drawButton}>
 					✏️ Draw
 				</button>
-				<button
-					type="button"
-					onClick={() => setShowCalm(true)}
-					style={styles.calmButton}
-				>
+				<button type="button" onClick={() => setShowCalm(true)} style={styles.calmButton}>
 					🌿 Calm
 				</button>
 			</div>
@@ -165,135 +235,130 @@ export const TappitBoard = () => {
 
 const styles = {
 	wrapper: {
-		maxWidth: "680px",
+		maxWidth: "780px",
 		margin: "0 auto",
-		padding: "1rem"
+		padding: "1rem",
+		minHeight: "100vh",
+	},
+	themeRow: {
+		display: "flex",
+		gap: "0.5rem",
+		marginBottom: "1rem",
+		justifyContent: "flex-end",
+	},
+	themeButton: {
+		width: "44px",
+		height: "44px",
+		borderRadius: "50%",
+		cursor: "pointer",
+		fontSize: "1.2rem",
 	},
 	quickSection: {
-		marginBottom: "1rem"
+		marginBottom: "1.5rem",
 	},
-	quickSectionHeading: {
-		margin: "0 0 0.5rem 0",
-		fontSize: "1.125rem",
+	categorySection: {
+		marginBottom: "1.5rem",
+	},
+	sectionHeading: {
+		margin: "0 0 0.75rem 0",
+		fontSize: "1.1rem",
 		fontWeight: "700",
-		color: "#111111"
 	},
 	quickRow: {
 		display: "flex",
 		flexWrap: "wrap",
 		gap: "0.75rem",
-		alignItems: "center"
 	},
-	quickButton: {
-		minHeight: "80px",
-		minWidth: "80px",
+	grid: {
+		display: "grid",
+		gridTemplateColumns: "repeat(auto-fill, minmax(85px, 1fr))",
+		gap: "0.75rem",
+	},
+	symbolButton: {
+		minHeight: "85px",
+		minWidth: "85px",
 		padding: "0.5rem",
-		border: "2px solid #c2410c",
-		borderRadius: "10px",
-		backgroundColor: "#fed7aa",
-		color: "#431407",
+		borderRadius: "16px",
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",
 		justifyContent: "center",
 		cursor: "pointer",
-		fontWeight: "700"
-	},
-	quickWord: {
-		marginTop: "0.25rem",
-		fontSize: "0.95rem",
-		fontWeight: "700"
-	},
-	grid: {
-		display: "grid",
-		gridTemplateColumns: "repeat(auto-fit, minmax(80px, 1fr))",
-		gap: "0.75rem"
-	},
-	symbolButton: {
-		minHeight: "80px",
-		minWidth: "80px",
-		padding: "0.5rem",
-		border: "2px solid #1f2937",
-		borderRadius: "10px",
-		backgroundColor: "#ffffff",
-		color: "#111111",
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
-		cursor: "pointer"
+		fontWeight: "700",
+		boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
 	},
 	emoji: {
-		fontSize: "1.8rem",
-		lineHeight: "1.2"
+		fontSize: "2rem",
+		lineHeight: "1.2",
 	},
 	word: {
 		marginTop: "0.25rem",
-		fontSize: "0.95rem",
-		fontWeight: "600"
+		fontSize: "0.85rem",
+		fontWeight: "700",
+		textAlign: "center",
 	},
 	tappitBar: {
 		marginTop: "1rem",
-		minHeight: "48px",
+		minHeight: "52px",
 		padding: "0.75rem",
-		border: "2px solid #1f2937",
-		borderRadius: "10px",
-		backgroundColor: "#f9fafb",
-		color: "#111111",
+		borderRadius: "14px",
 		fontSize: "1rem",
-		fontWeight: "500"
+		fontWeight: "500",
 	},
 	buttonRow: {
 		marginTop: "0.75rem",
 		display: "flex",
 		gap: "0.75rem",
 		alignItems: "center",
-		flexWrap: "wrap"
+		flexWrap: "wrap",
 	},
 	speakButton: {
-		minWidth: "80px",
-		minHeight: "80px",
+		minWidth: "85px",
+		minHeight: "85px",
 		padding: "0.5rem",
 		border: "2px solid #d97706",
-		borderRadius: "8px",
+		borderRadius: "16px",
 		backgroundColor: "#fbbf24",
 		color: "#422006",
 		fontWeight: "700",
-		cursor: "pointer"
+		cursor: "pointer",
+		fontSize: "0.95rem",
 	},
 	speakButtonDisabled: {
 		opacity: 0.5,
-		cursor: "not-allowed"
+		cursor: "not-allowed",
 	},
 	clearButton: {
 		padding: "0.6rem 1rem",
-		border: "2px solid #1f2937",
-		borderRadius: "8px",
+		border: "2px solid #6b7280",
+		borderRadius: "12px",
 		backgroundColor: "#e5e7eb",
 		color: "#111111",
 		fontWeight: "700",
-		cursor: "pointer"
+		cursor: "pointer",
 	},
 	drawButton: {
-		minWidth: "80px",
-		minHeight: "80px",
+		minWidth: "85px",
+		minHeight: "85px",
 		padding: "0.5rem",
 		border: "2px solid #7c3aed",
-		borderRadius: "8px",
+		borderRadius: "16px",
 		backgroundColor: "#ede9fe",
 		color: "#3b0764",
 		fontWeight: "700",
-		cursor: "pointer"
+		cursor: "pointer",
+		fontSize: "0.95rem",
 	},
 	calmButton: {
-		minWidth: "80px",
-		minHeight: "80px",
+		minWidth: "85px",
+		minHeight: "85px",
 		padding: "0.5rem",
 		border: "2px solid #059669",
-		borderRadius: "8px",
+		borderRadius: "16px",
 		backgroundColor: "#d1fae5",
 		color: "#064e3b",
 		fontWeight: "700",
-		cursor: "pointer"
+		cursor: "pointer",
+		fontSize: "0.95rem",
 	},
 };
