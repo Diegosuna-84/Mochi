@@ -1,11 +1,16 @@
 import React from "react";
+import { useOutletContext } from "react-router-dom";
 import { TappitBoard } from "../js/component/TappitBoard.jsx";
 
 export const Home = () => {
-	return (
-		<div className="mt-4">
-			<h1 className="text-center mb-4">Tappit Board</h1>
-			<TappitBoard />
-		</div>
-	);
+    const { showSettings, setShowSettings } = useOutletContext();
+
+    return (
+        <div>
+            <TappitBoard
+                showSettings={showSettings}
+                setShowSettings={setShowSettings}
+            />
+        </div>
+    );
 };

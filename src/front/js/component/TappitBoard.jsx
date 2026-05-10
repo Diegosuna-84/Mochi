@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { DrawingArea } from "./DrawingArea";
 import { CalmCorner } from "./CalmCorner";
+import { SettingsPage } from "./SettingsPage";
 
 const THEMES = {
-	blue:  { bg: "#e0f2fe", card: "#ffffff", text: "#111111", border: "#7dd3fc", heading: "#0369a1" },
-	pink:  { bg: "#fce7f3", card: "#ffffff", text: "#111111", border: "#f9a8d4", heading: "#9d174d" },
+	blue: { bg: "#e0f2fe", card: "#ffffff", text: "#111111", border: "#7dd3fc", heading: "#0369a1" },
+	pink: { bg: "#fce7f3", card: "#ffffff", text: "#111111", border: "#f9a8d4", heading: "#9d174d" },
 	white: { bg: "#ffffff", card: "#f9fafb", text: "#111111", border: "#d1d5db", heading: "#111111" },
-	dark:  { bg: "#1e1e2e", card: "#2e2e3e", text: "#ffffff", border: "#4b5563", heading: "#93c5fd" },
+	dark: { bg: "#1e1e2e", card: "#2e2e3e", text: "#ffffff", border: "#4b5563", heading: "#93c5fd" },
+	energy: { bg: "#fff7ed", card: "#ffffff", text: "#111111", border: "#fb923c", heading: "#ea580c" },
 };
 
 const CATEGORIES = [
@@ -26,7 +28,7 @@ const CATEGORIES = [
 			{ word: "Help", emoji: "🆘" },
 			{ word: "Hot", emoji: "🔥" },
 			{ word: "Cold", emoji: "🧊" },
-		]
+		],
 	},
 	{
 		label: "🍎 Food & Drink",
@@ -41,7 +43,7 @@ const CATEGORIES = [
 			{ word: "Drink", emoji: "🥤" },
 			{ word: "Milk", emoji: "🥛" },
 			{ word: "Food", emoji: "🍽️" },
-		]
+		],
 	},
 	{
 		label: "😊 Feelings",
@@ -50,7 +52,7 @@ const CATEGORIES = [
 			{ word: "Sad", emoji: "😢" },
 			{ word: "Tired", emoji: "😴" },
 			{ word: "Hurt", emoji: "🤕" },
-		]
+		],
 	},
 	{
 		label: "🏠 Places & Things",
@@ -62,7 +64,7 @@ const CATEGORIES = [
 			{ word: "Outside", emoji: "🌤️" },
 			{ word: "Inside", emoji: "🏡" },
 			{ word: "Break", emoji: "☕" },
-		]
+		],
 	},
 ];
 
@@ -72,12 +74,24 @@ const quickTappits = [
 	{ word: "Break", emoji: "☕" },
 ];
 
-export const TappitBoard = () => {
+export const TappitBoard = ({ showSettings, setShowSettings }) => {
 	const [phrase, setPhrase] = useState([]);
 	const [showDrawing, setShowDrawing] = useState(false);
 	const [showCalm, setShowCalm] = useState(false);
 	const [theme, setTheme] = useState("blue");
-	const t = THEMES[theme];
+	const defaultSettings = {
+		showDraw: true,
+		showCalmCorner: true,
+		showQuickTappit: true,
+		simplifiedMode: false,
+		theme: "blue",
+		tapSounds: false,
+	};
+	const [settings, setSettings] = useState(() => {
+		const saved = localStorage.getItem("mochiSettings");
+		return saved ? JSON.parse(saved) : defaultSettings;
+	});
+	const t = THEMES[settings.theme] || THEMES["blue"];
 
 	const defaultProfile = { name: "", ageGroup: "", voicePreference: "" };
 	const [profile, setProfile] = useState(() => {
@@ -89,12 +103,16 @@ export const TappitBoard = () => {
 		localStorage.setItem("mochiProfile", JSON.stringify(profile));
 	}, [profile]);
 
+	useEffect(() => {
+		localStorage.setItem("mochiSettings", JSON.stringify(settings));
+	}, [settings]);
+
 	const syncProfile = async (updatedProfile) => {
 		try {
 			await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/profile`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(updatedProfile)
+				body: JSON.stringify(updatedProfile),
 			});
 		} catch (error) {
 			console.log("Profile sync skipped. App still works offline.");
@@ -108,6 +126,7 @@ export const TappitBoard = () => {
 	};
 
 	const handleSymbolClick = (word) => {
+		playTapSound();
 		setPhrase((cur) => [...cur, word]);
 	};
 
@@ -118,63 +137,92 @@ export const TappitBoard = () => {
 		const utterance = new SpeechSynthesisUtterance(phrase.join(" "));
 		window.speechSynthesis.speak(utterance);
 	};
+	const playTapSound = () => {
+		if (!settings.tapSounds) return;
+		const ctx = new (window.AudioContext || window.webkitAudioContext)();
+		const oscillator = ctx.createOscillator();
+		const gainNode = ctx.createGain();
+		oscillator.connect(gainNode);
+		gainNode.connect(ctx.destination);
+		oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+		oscillator.type = "sine";
+		gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
+		gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+		oscillator.start(ctx.currentTime);
+		oscillator.stop(ctx.currentTime + 0.15);
+	};
 
 	const speakQuickWord = (word) => {
+		playTapSound();
 		const utterance = new SpeechSynthesisUtterance(word);
 		window.speechSynthesis.speak(utterance);
 	};
 
 	if (showDrawing) return <DrawingArea onBack={() => setShowDrawing(false)} />;
 	if (showCalm) return <CalmCorner onBack={() => setShowCalm(false)} />;
+	if (showSettings) return (
+		<SettingsPage
+			profile={profile}
+			settings={settings}
+			onProfileChange={(updated) => setProfile(updated)}
+			onSettingsChange={(updated) => setSettings(updated)}
+			onBack={() => setShowSettings(false)}
+		/>
+	);
 
 	return (
 		<div style={{ ...styles.wrapper, backgroundColor: t.bg }}>
-
 			{/* Theme Switcher */}
 			<div style={styles.themeRow}>
 				{Object.keys(THEMES).map((key) => (
 					<button
 						key={key}
-						onClick={() => setTheme(key)}
+						onClick={() => setSettings({ ...settings, theme: key })}
 						style={{
 							...styles.themeButton,
 							backgroundColor: THEMES[key].bg,
-							border: theme === key ? `3px solid ${t.heading}` : "3px solid transparent",
+							border: settings.theme === key ? `3px solid ${t.heading}` : "3px solid transparent",
 							color: THEMES[key].text,
 						}}
 					>
-						{key === "blue" ? "☀️" : key === "pink" ? "🌸" : key === "white" ? "⬜" : "🌙"}
+						{key === "blue" ? "☀️" : key === "pink" ? "🌸" : key === "white" ? "⬜" : key === "dark" ? "🌙" : "⚡"}
 					</button>
 				))}
 			</div>
 
 			{/* Quick Tappit */}
-			<section style={styles.quickSection}>
-				<h2 style={{ ...styles.sectionHeading, color: t.heading }}>Quick Tappit</h2>
-				<div style={styles.quickRow}>
-					{quickTappits.map((item) => (
-						<button
-							key={item.word}
-							type="button"
-							onClick={() => speakQuickWord(item.word)}
-							style={{
-								...styles.symbolButton,
-								backgroundColor: "#fed7aa",
-								border: `2px solid #c2410c`,
-								color: "#431407",
-							}}
-						>
-							<span style={styles.emoji}>{item.emoji}</span>
-							<span style={styles.word}>{item.word}</span>
-						</button>
-					))}
-				</div>
-			</section>
+			{settings.showQuickTappit && (
+				<section style={styles.quickSection}>
+					<h2 style={{ ...styles.sectionHeading, color: t.heading }}>
+						Quick Tappit
+					</h2>
+					<div style={styles.quickRow}>
+						{quickTappits.map((item) => (
+							<button
+								key={item.word}
+								type="button"
+								onClick={() => speakQuickWord(item.word)}
+								style={{
+									...styles.symbolButton,
+									backgroundColor: "#fed7aa",
+									border: `2px solid #c2410c`,
+									color: "#431407",
+								}}
+							>
+								<span style={styles.emoji}>{item.emoji}</span>
+								<span style={styles.word}>{item.word}</span>
+							</button>
+						))}
+					</div>
+				</section>
+			)}
 
 			{/* Categories */}
 			{CATEGORIES.map((cat) => (
 				<section key={cat.label} style={styles.categorySection}>
-					<h2 style={{ ...styles.sectionHeading, color: t.heading }}>{cat.label}</h2>
+					<h2 style={{ ...styles.sectionHeading, color: t.heading }}>
+						{cat.label}
+					</h2>
 					<div style={styles.grid}>
 						{cat.symbols.map((symbol) => (
 							<button
@@ -197,12 +245,14 @@ export const TappitBoard = () => {
 			))}
 
 			{/* Tappit Bar */}
-			<div style={{
-				...styles.tappitBar,
-				backgroundColor: t.card,
-				border: `2px solid ${t.border}`,
-				color: t.text,
-			}}>
+			<div
+				style={{
+					...styles.tappitBar,
+					backgroundColor: t.card,
+					border: `2px solid ${t.border}`,
+					color: t.text,
+				}}
+			>
 				{phrase.length > 0 ? phrase.join(" ") : "Tap a symbol to start..."}
 			</div>
 
@@ -214,7 +264,7 @@ export const TappitBoard = () => {
 					disabled={phrase.length === 0}
 					style={{
 						...styles.speakButton,
-						...(phrase.length === 0 ? styles.speakButtonDisabled : {})
+						...(phrase.length === 0 ? styles.speakButtonDisabled : {}),
 					}}
 				>
 					Speak 🔊
@@ -222,12 +272,24 @@ export const TappitBoard = () => {
 				<button type="button" onClick={clearPhrase} style={styles.clearButton}>
 					Clear
 				</button>
-				<button type="button" onClick={() => setShowDrawing(true)} style={styles.drawButton}>
-					✏️ Draw
-				</button>
-				<button type="button" onClick={() => setShowCalm(true)} style={styles.calmButton}>
-					🌿 Calm
-				</button>
+				{settings.showDraw && (
+					<button
+						type="button"
+						onClick={() => setShowDrawing(true)}
+						style={styles.drawButton}
+					>
+						✏️ Draw
+					</button>
+				)}
+				{settings.showCalmCorner && (
+					<button
+						type="button"
+						onClick={() => setShowCalm(true)}
+						style={styles.calmButton}
+					>
+						🌿 Calm
+					</button>
+				)}
 			</div>
 		</div>
 	);

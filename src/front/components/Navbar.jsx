@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export const Navbar = () => {
+export const Navbar = ({ onSettingsClick }) => {
     return (
         <nav style={styles.nav}>
             <Link to="/" style={styles.link}>
@@ -9,6 +9,13 @@ export const Navbar = () => {
                     <span style={styles.title}>Mochi</span>
                 </div>
             </Link>
+            <button
+                onClick={onSettingsClick}
+                style={styles.settingsButton}
+                aria-label="Open Settings"
+            >
+                ⚙️ Settings
+            </button>
         </nav>
     );
 };
@@ -18,7 +25,7 @@ const styles = {
         backgroundColor: "#002366",
         padding: "0.75rem 1rem",
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
         boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
     },
@@ -44,5 +51,18 @@ const styles = {
         color: "#002366",
         letterSpacing: "2px",
         fontFamily: "Georgia, serif",
+    },
+    settingsButton: {
+        minHeight: "44px",
+        minWidth: "44px",
+        padding: "0.5rem 1rem",
+        backgroundColor: "#ffffff",
+        color: "#002366",
+        border: "none",
+        borderRadius: "50px",
+        fontWeight: "700",
+        fontSize: "0.95rem",
+        cursor: "pointer",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
     },
 };
