@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DrawingArea } from "./DrawingArea";
 import { CalmCorner } from "./CalmCorner";
 import { SettingsPage } from "./SettingsPage";
+import { WelcomeBanner } from "./WelcomeBanner";
 
 const THEMES = {
 	blue: { bg: "#e0f2fe", card: "#ffffff", text: "#111111", border: "#7dd3fc", heading: "#0369a1" },
@@ -76,6 +77,9 @@ const quickTappits = [
 
 export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) => {
 	const [phrase, setPhrase] = useState([]);
+	const [welcomeSeen, setWelcomeSeen] = useState(
+		() => !!localStorage.getItem("mochiWelcomeSeen")
+	);
 	const [showDrawing, setShowDrawing] = useState(false);
 	const [showCalm, setShowCalm] = useState(false);
 	const [theme, setTheme] = useState("blue");
@@ -177,6 +181,13 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
 
 	return (
 		<div style={{ ...styles.wrapper, backgroundColor: t.bg }}>
+			{/* Welcome Banner */}
+			{!welcomeSeen && (
+				<WelcomeBanner onDismiss={() => {
+					localStorage.setItem("mochiWelcomeSeen", "true");
+					setWelcomeSeen(true);
+				}} />
+			)}
 			{/* Theme Switcher */}
 			<div style={styles.themeRow}>
 				{Object.keys(THEMES).map((key) => (
