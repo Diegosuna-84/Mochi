@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsChange, onBack, onSwitchProfile }) => {
+    const [voices, setVoices] = useState([]);
+
+    useEffect(() => {
+        const loadVoices = () => setVoices(window.speechSynthesis.getVoices());
+        loadVoices();
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+    }, []);
+
     return (
         <div style={styles.wrapper}>
 
@@ -28,6 +36,21 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
                         style={styles.input}
                         placeholder="Enter name"
                     />
+                </div>
+                <div style={styles.field}>
+                    <label style={styles.label}>Preferred Voice</label>
+                    <select
+                        value={profile.voicePreference}
+                        onChange={(e) => onProfileChange({ ...profile, voicePreference: e.target.value })}
+                        style={styles.input}
+                    >
+                        <option value="">Default voice</option>
+                        {voices.map((voice) => (
+                            <option key={voice.name} value={voice.name}>
+                                {voice.name} ({voice.lang})
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 <div style={styles.field}>
@@ -105,6 +128,19 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
                     </button>
                 </div>
                 <div style={styles.toggleRow}>
+                    <span style={styles.toggleLabel}>Learning Mode</span>
+                    <button
+                        onClick={() => onSettingsChange({ ...settings, learningMode: !settings.learningMode })}
+                        style={{
+                            ...styles.toggle,
+                            backgroundColor: settings.learningMode ? "#002366" : "#e5e7eb",
+                            color: settings.learningMode ? "#ffffff" : "#111111",
+                        }}
+                    >
+                        {settings.learningMode ? "On" : "Off"}
+                    </button>
+                </div>
+                <div style={styles.toggleRow}>
                     <span style={styles.toggleLabel}>Tap Sounds</span>
                     <button
                         onClick={() => onSettingsChange({ ...settings, tapSounds: !settings.tapSounds })}
@@ -135,7 +171,7 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
                                     border: settings.theme === t ? "3px solid #002366" : "3px solid #e5e7eb",
                                 }}
                             >
-                                {t === "blue" ? "☀️" : t === "pink" ? "🌸" : t === "white" ? "⬜" : "🌙"}
+                                {t === "blue" ? "☀️" : t === "pink" ? "🌸" : t === "white" ? "⬜" : t === "dark" ? "🌙" : "⚡"}
                                 <span style={styles.themeLabel}>{t}</span>
                             </button>
                         ))}
