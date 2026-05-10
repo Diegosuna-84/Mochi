@@ -74,7 +74,7 @@ const quickTappits = [
 	{ word: "Break", emoji: "☕" },
 ];
 
-export const TappitBoard = ({ showSettings, setShowSettings }) => {
+export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) => {
 	const [phrase, setPhrase] = useState([]);
 	const [showDrawing, setShowDrawing] = useState(false);
 	const [showCalm, setShowCalm] = useState(false);
@@ -87,8 +87,9 @@ export const TappitBoard = ({ showSettings, setShowSettings }) => {
 		theme: "blue",
 		tapSounds: false,
 	};
+	const settingsKey = activeProfile ? `mochiSettings_${activeProfile.id}` : "mochiSettings_guest";
 	const [settings, setSettings] = useState(() => {
-		const saved = localStorage.getItem("mochiSettings");
+		const saved = localStorage.getItem(settingsKey);
 		return saved ? JSON.parse(saved) : defaultSettings;
 	});
 	const t = THEMES[settings.theme] || THEMES["blue"];
@@ -104,7 +105,7 @@ export const TappitBoard = ({ showSettings, setShowSettings }) => {
 	}, [profile]);
 
 	useEffect(() => {
-		localStorage.setItem("mochiSettings", JSON.stringify(settings));
+		localStorage.setItem(settingsKey, JSON.stringify(settings));
 	}, [settings]);
 
 	const syncProfile = async (updatedProfile) => {
@@ -167,6 +168,10 @@ export const TappitBoard = ({ showSettings, setShowSettings }) => {
 			onProfileChange={(updated) => setProfile(updated)}
 			onSettingsChange={(updated) => setSettings(updated)}
 			onBack={() => setShowSettings(false)}
+			onSwitchProfile={() => {
+				localStorage.removeItem("mochiActiveProfile");
+				window.location.reload();
+			}}
 		/>
 	);
 

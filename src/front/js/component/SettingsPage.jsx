@@ -1,6 +1,6 @@
 import React from "react";
 
-export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsChange, onBack }) => {
+export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsChange, onBack, onSwitchProfile }) => {
     return (
         <div style={styles.wrapper}>
 
@@ -10,6 +10,9 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
                     ← Back
                 </button>
                 <h1 style={styles.pageTitle}>Profile & Settings</h1>
+                <button onClick={onSwitchProfile} style={styles.switchButton}>
+                    Switch Profile
+                </button>
             </div>
 
             {/* Section 1 — Profile */}
@@ -253,5 +256,16 @@ const styles = {
         fontWeight: "600",
         color: "#374151",
         textTransform: "capitalize",
+    },
+    switchButton: {
+        minHeight: "44px",
+        padding: "0.5rem 1rem",
+        border: "2px solid #002366",
+        borderRadius: "8px",
+        backgroundColor: "#f0f9ff",
+        color: "#002366",
+        fontWeight: "700",
+        cursor: "pointer",
+        fontSize: "0.9rem",
     },
 };
