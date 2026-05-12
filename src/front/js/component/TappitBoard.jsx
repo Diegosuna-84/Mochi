@@ -3,12 +3,13 @@ import { DrawingArea } from "./DrawingArea";
 import { CalmCorner } from "./CalmCorner";
 import { SettingsPage } from "./SettingsPage";
 import { WelcomeBanner } from "./WelcomeBanner";
+import { RhymesCorner } from "./RhymesCorner";
 
 const THEMES = {
-    blue:   { bg: "#e0f2fe", card: "#ffffff", text: "#111111", border: "#7dd3fc", heading: "#0369a1" },
-    pink:   { bg: "#fce7f3", card: "#ffffff", text: "#111111", border: "#f9a8d4", heading: "#9d174d" },
-    white:  { bg: "#ffffff", card: "#f9fafb", text: "#111111", border: "#d1d5db", heading: "#111111" },
-    dark:   { bg: "#1e1e2e", card: "#2e2e3e", text: "#ffffff", border: "#4b5563", heading: "#93c5fd" },
+    blue: { bg: "#e0f2fe", card: "#ffffff", text: "#111111", border: "#7dd3fc", heading: "#0369a1" },
+    pink: { bg: "#fce7f3", card: "#ffffff", text: "#111111", border: "#f9a8d4", heading: "#9d174d" },
+    white: { bg: "#ffffff", card: "#f9fafb", text: "#111111", border: "#d1d5db", heading: "#111111" },
+    dark: { bg: "#1e1e2e", card: "#2e2e3e", text: "#ffffff", border: "#4b5563", heading: "#93c5fd" },
     energy: { bg: "#fff7ed", card: "#ffffff", text: "#111111", border: "#fb923c", heading: "#ea580c" },
 };
 
@@ -88,6 +89,7 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
     );
     const [showDrawing, setShowDrawing] = useState(false);
     const [showCalm, setShowCalm] = useState(false);
+    const [showRhymes, setShowRhymes] = useState(false);
 
     const defaultSettings = {
         showDraw: true,
@@ -97,6 +99,7 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
         theme: "blue",
         tapSounds: false,
         learningMode: false,
+        showRhymes: false,
     };
 
     const settingsKey = activeProfile ? `mochiSettings_${activeProfile.id}` : "mochiSettings_guest";
@@ -180,6 +183,7 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
 
     if (showDrawing) return <DrawingArea onBack={() => setShowDrawing(false)} />;
     if (showCalm) return <CalmCorner onBack={() => setShowCalm(false)} />;
+    if (showRhymes) return <RhymesCorner onBack={() => setShowRhymes(false)} />;
     if (showSettings) return (
         <SettingsPage
             profile={profile}
@@ -312,6 +316,11 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
                         🌿 Calm
                     </button>
                 )}
+                {settings.showRhymes && (
+                    <button type="button" onClick={() => setShowRhymes(true)} style={styles.rhymesButton}>
+                        🎵 Rhymes
+                    </button>
+                )}
             </div>
         </div>
     );
@@ -441,6 +450,18 @@ const styles = {
         borderRadius: "16px",
         backgroundColor: "#d1fae5",
         color: "#064e3b",
+        fontWeight: "700",
+        cursor: "pointer",
+        fontSize: "0.95rem",
+    },
+    rhymesButton: {
+        minWidth: "85px",
+        minHeight: "85px",
+        padding: "0.5rem",
+        border: "2px solid #db2777",
+        borderRadius: "16px",
+        backgroundColor: "#fce7f3",
+        color: "#831843",
         fontWeight: "700",
         cursor: "pointer",
         fontSize: "0.95rem",

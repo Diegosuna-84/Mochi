@@ -153,6 +153,19 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
                         {settings.tapSounds ? "On" : "Off"}
                     </button>
                 </div>
+                <div style={styles.toggleRow}>
+                    <span style={styles.toggleLabel}>Show Rhymes Corner</span>
+                    <button
+                        onClick={() => onSettingsChange({ ...settings, showRhymes: !settings.showRhymes })}
+                        style={{
+                            ...styles.toggle,
+                            backgroundColor: settings.showRhymes ? "#002366" : "#e5e7eb",
+                            color: settings.showRhymes ? "#ffffff" : "#111111",
+                        }}
+                    >
+                        {settings.showRhymes ? "On" : "Off"}
+                    </button>
+                </div>
             </section>
 
             {/* Section 3 — Appearance */}
@@ -171,7 +184,7 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
                                     border: settings.theme === t ? "3px solid #002366" : "3px solid #e5e7eb",
                                 }}
                             >
-                                {t === "blue" ? "☀️" : t === "pink" ? "🌸" : t === "white" ? "⬜" : t === "dark" ? "🌙" : "⚡"}
+                                {t === "blue" ? "☀️" : t === "pink" ? "🌸" : t === "white" ? "⬜" : t === "dark" ? "🌙" : "⚡"}so A they have to sign
                                 <span style={styles.themeLabel}>{t}</span>
                             </button>
                         ))}
