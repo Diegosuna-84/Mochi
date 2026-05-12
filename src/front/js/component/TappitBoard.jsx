@@ -54,6 +54,10 @@ const CATEGORIES = [
             { word: "Sad", emoji: "😢" },
             { word: "Tired", emoji: "😴" },
             { word: "Hurt", emoji: "🤕" },
+            { word: "Angry", emoji: "😠" },
+            { word: "Scared", emoji: "😨" },
+            { word: "Excited", emoji: "🤩" },
+            { word: "Calm", emoji: "😌" },
         ],
     },
     {
@@ -66,6 +70,70 @@ const CATEGORIES = [
             { word: "Outside", emoji: "🌤️" },
             { word: "Inside", emoji: "🏡" },
             { word: "Break", emoji: "☕" },
+            { word: "Car", emoji: "🚗" },
+            { word: "Store", emoji: "🏪" },
+            { word: "Hospital", emoji: "🏥" },
+        ],
+    },
+    {
+        label: "🐶 Animals",
+        symbols: [
+            { word: "Dog", emoji: "🐶" },
+            { word: "Cat", emoji: "🐱" },
+            { word: "Bird", emoji: "🐦" },
+            { word: "Fish", emoji: "🐟" },
+            { word: "Bear", emoji: "🐻" },
+            { word: "Horse", emoji: "🐴" },
+            { word: "Cow", emoji: "🐄" },
+            { word: "Rabbit", emoji: "🐰" },
+            { word: "Duck", emoji: "🦆" },
+            { word: "Lion", emoji: "🦁" },
+        ],
+    },
+    {
+        label: "🎨 Objects",
+        symbols: [
+            { word: "Ball", emoji: "⚽" },
+            { word: "Book", emoji: "📚" },
+            { word: "Toy", emoji: "🧸" },
+            { word: "Chair", emoji: "🪑" },
+            { word: "Bed", emoji: "🛏️" },
+            { word: "Door", emoji: "🚪" },
+            { word: "Phone", emoji: "📱" },
+            { word: "TV", emoji: "📺" },
+            { word: "Cup", emoji: "☕" },
+            { word: "Bag", emoji: "🎒" },
+        ],
+    },
+    {
+        label: "👨‍👩‍👧 People",
+        symbols: [
+            { word: "Mom", emoji: "👩" },
+            { word: "Dad", emoji: "👨" },
+            { word: "Brother", emoji: "👦" },
+            { word: "Sister", emoji: "👧" },
+            { word: "Grandma", emoji: "👵" },
+            { word: "Grandpa", emoji: "👴" },
+            { word: "Baby", emoji: "👶" },
+            { word: "Friend", emoji: "🧑" },
+            { word: "Teacher", emoji: "👩‍🏫" },
+            { word: "Doctor", emoji: "👨‍⚕️" },
+            { word: "Family", emoji: "👨‍👩‍👧" },
+        ],
+    },
+    {
+        label: "🔢 Numbers",
+        symbols: [
+            { word: "1", emoji: "1️⃣" },
+            { word: "2", emoji: "2️⃣" },
+            { word: "3", emoji: "3️⃣" },
+            { word: "4", emoji: "4️⃣" },
+            { word: "5", emoji: "5️⃣" },
+            { word: "6", emoji: "6️⃣" },
+            { word: "7", emoji: "7️⃣" },
+            { word: "8", emoji: "8️⃣" },
+            { word: "9", emoji: "9️⃣" },
+            { word: "10", emoji: "🔟" },
         ],
     },
 ];
@@ -212,24 +280,6 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
                 }} />
             )}
 
-            {/* Theme Switcher */}
-            <div style={styles.themeRow}>
-                {Object.keys(THEMES).map((key) => (
-                    <button
-                        key={key}
-                        onClick={() => setSettings({ ...settings, theme: key })}
-                        style={{
-                            ...styles.themeButton,
-                            backgroundColor: THEMES[key].bg,
-                            border: settings.theme === key ? `3px solid ${t.heading}` : "3px solid transparent",
-                            color: THEMES[key].text,
-                        }}
-                    >
-                        {key === "blue" ? "☀️" : key === "pink" ? "🌸" : key === "white" ? "⬜" : key === "dark" ? "🌙" : "⚡"}
-                    </button>
-                ))}
-            </div>
-
             {/* Quick Tappit */}
             {settings.showQuickTappit && (
                 <section style={styles.quickSection}>
@@ -290,35 +340,67 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
                 {phrase.length > 0 ? phrase.join(" ") : "Tap a symbol to start..."}
             </div>
 
-            {/* Action Buttons */}
-            <div style={styles.buttonRow}>
+            {/* Sticky Bottom Action Bar */}
+            <div style={{ ...styles.stickyBar, backgroundColor: t.bg, borderTop: `2px solid ${t.border}` }}>
                 <button
                     type="button"
                     onClick={speakPhrase}
                     disabled={phrase.length === 0}
                     style={{
-                        ...styles.speakButton,
-                        ...(phrase.length === 0 ? styles.speakButtonDisabled : {}),
+                        ...styles.actionButton,
+                        backgroundColor: "#fbbf24",
+                        border: "2px solid #d97706",
+                        color: "#422006",
+                        ...(phrase.length === 0 ? styles.disabled : {}),
                     }}
                 >
-                    Speak 🔊
+                    <span style={styles.actionEmoji}>🔊</span>
+                    <span style={styles.actionLabel}>Speak</span>
                 </button>
-                <button type="button" onClick={clearPhrase} style={styles.clearButton}>
-                    Clear
+
+                <button type="button" onClick={clearPhrase} style={{
+                    ...styles.actionButton,
+                    backgroundColor: "#e5e7eb",
+                    border: "2px solid #6b7280",
+                    color: "#111111",
+                }}>
+                    <span style={styles.actionEmoji}>🗑️</span>
+                    <span style={styles.actionLabel}>Clear</span>
                 </button>
+
                 {settings.showDraw && (
-                    <button type="button" onClick={() => setShowDrawing(true)} style={styles.drawButton}>
-                        ✏️ Draw
+                    <button type="button" onClick={() => setShowDrawing(true)} style={{
+                        ...styles.actionButton,
+                        backgroundColor: "#ede9fe",
+                        border: "2px solid #7c3aed",
+                        color: "#3b0764",
+                    }}>
+                        <span style={styles.actionEmoji}>✏️</span>
+                        <span style={styles.actionLabel}>Draw</span>
                     </button>
                 )}
+
                 {settings.showCalmCorner && (
-                    <button type="button" onClick={() => setShowCalm(true)} style={styles.calmButton}>
-                        🌿 Calm
+                    <button type="button" onClick={() => setShowCalm(true)} style={{
+                        ...styles.actionButton,
+                        backgroundColor: "#d1fae5",
+                        border: "2px solid #059669",
+                        color: "#064e3b",
+                    }}>
+                        <span style={styles.actionEmoji}>🌿</span>
+                        <span style={styles.actionLabel}>Calm</span>
                     </button>
                 )}
+
                 {settings.showRhymes && (
-                    <button type="button" onClick={() => setShowRhymes(true)} style={styles.rhymesButton}>
-                        🎵 Rhymes
+                    <button type="button" onClick={() => setShowRhymes(true)} style={{
+                        ...styles.actionButton,
+                        backgroundColor: "#fce7f3",
+                        border: "2px solid #db2777",
+                        color: "#831843",
+                    }}>
+                        <span style={styles.actionEmoji}>🎵</span>
+                        <span style={styles.actionLabel}>Rhymes</span>
                     </button>
                 )}
             </div>
@@ -328,23 +410,11 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
 
 const styles = {
     wrapper: {
-        maxWidth: "780px",
+        maxWidth: "100%",
         margin: "0 auto",
         padding: "1rem",
+        paddingBottom: "120px",
         minHeight: "100vh",
-    },
-    themeRow: {
-        display: "flex",
-        gap: "0.5rem",
-        marginBottom: "1rem",
-        justifyContent: "flex-end",
-    },
-    themeButton: {
-        width: "44px",
-        height: "44px",
-        borderRadius: "50%",
-        cursor: "pointer",
-        fontSize: "1.2rem",
     },
     quickSection: {
         marginBottom: "1.5rem",
@@ -392,78 +462,51 @@ const styles = {
     },
     tappitBar: {
         marginTop: "1rem",
+        marginBottom: "1rem",
         minHeight: "52px",
         padding: "0.75rem",
         borderRadius: "14px",
         fontSize: "1rem",
         fontWeight: "500",
     },
-    buttonRow: {
-        marginTop: "0.75rem",
+    stickyBar: {
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
         display: "flex",
-        gap: "0.75rem",
+        justifyContent: "center",
         alignItems: "center",
+        gap: "0.5rem",
+        padding: "0.75rem 1rem",
         flexWrap: "wrap",
+        zIndex: 100,
+        boxShadow: "0 -4px 12px rgba(0,0,0,0.1)",
     },
-    speakButton: {
-        minWidth: "85px",
-        minHeight: "85px",
-        padding: "0.5rem",
-        border: "2px solid #d97706",
-        borderRadius: "16px",
-        backgroundColor: "#fbbf24",
-        color: "#422006",
-        fontWeight: "700",
+    actionButton: {
+        minWidth: "70px",
+        minHeight: "70px",
+        padding: "0.4rem",
+        borderRadius: "14px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
         cursor: "pointer",
-        fontSize: "0.95rem",
+        fontWeight: "700",
+        gap: "0.2rem",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
     },
-    speakButtonDisabled: {
+    actionEmoji: {
+        fontSize: "1.6rem",
+        lineHeight: "1",
+    },
+    actionLabel: {
+        fontSize: "0.7rem",
+        fontWeight: "700",
+    },
+    disabled: {
         opacity: 0.5,
         cursor: "not-allowed",
-    },
-    clearButton: {
-        padding: "0.6rem 1rem",
-        border: "2px solid #6b7280",
-        borderRadius: "12px",
-        backgroundColor: "#e5e7eb",
-        color: "#111111",
-        fontWeight: "700",
-        cursor: "pointer",
-    },
-    drawButton: {
-        minWidth: "85px",
-        minHeight: "85px",
-        padding: "0.5rem",
-        border: "2px solid #7c3aed",
-        borderRadius: "16px",
-        backgroundColor: "#ede9fe",
-        color: "#3b0764",
-        fontWeight: "700",
-        cursor: "pointer",
-        fontSize: "0.95rem",
-    },
-    calmButton: {
-        minWidth: "85px",
-        minHeight: "85px",
-        padding: "0.5rem",
-        border: "2px solid #059669",
-        borderRadius: "16px",
-        backgroundColor: "#d1fae5",
-        color: "#064e3b",
-        fontWeight: "700",
-        cursor: "pointer",
-        fontSize: "0.95rem",
-    },
-    rhymesButton: {
-        minWidth: "85px",
-        minHeight: "85px",
-        padding: "0.5rem",
-        border: "2px solid #db2777",
-        borderRadius: "16px",
-        backgroundColor: "#fce7f3",
-        color: "#831843",
-        fontWeight: "700",
-        cursor: "pointer",
-        fontSize: "0.95rem",
     },
 };

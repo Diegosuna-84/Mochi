@@ -14,19 +14,14 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
 
             {/* Top Bar */}
             <div style={styles.topBar}>
-                <button onClick={onBack} style={styles.backButton}>
-                    ← Back
-                </button>
+                <button onClick={onBack} style={styles.backButton}>← Back</button>
                 <h1 style={styles.pageTitle}>Profile & Settings</h1>
-                <button onClick={onSwitchProfile} style={styles.switchButton}>
-                    Switch Profile
-                </button>
+                <button onClick={onSwitchProfile} style={styles.switchButton}>Switch Profile</button>
             </div>
 
             {/* Section 1 — Profile */}
             <section style={styles.section}>
                 <h2 style={styles.sectionHeading}>👤 Profile</h2>
-
                 <div style={styles.field}>
                     <label style={styles.label}>Name</label>
                     <input
@@ -52,7 +47,6 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
                         ))}
                     </select>
                 </div>
-
                 <div style={styles.field}>
                     <label style={styles.label}>Age Group</label>
                     <select
@@ -71,121 +65,54 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
             {/* Section 2 — Board Settings */}
             <section style={styles.section}>
                 <h2 style={styles.sectionHeading}>🎛️ Board Settings</h2>
-
-                <div style={styles.toggleRow}>
-                    <span style={styles.toggleLabel}>Show Quick Tappit</span>
-                    <button
-                        onClick={() => onSettingsChange({ ...settings, showQuickTappit: !settings.showQuickTappit })}
-                        style={{
-                            ...styles.toggle,
-                            backgroundColor: settings.showQuickTappit ? "#002366" : "#e5e7eb",
-                            color: settings.showQuickTappit ? "#ffffff" : "#111111",
-                        }}
-                    >
-                        {settings.showQuickTappit ? "On" : "Off"}
-                    </button>
-                </div>
-
-                <div style={styles.toggleRow}>
-                    <span style={styles.toggleLabel}>Show Draw Button</span>
-                    <button
-                        onClick={() => onSettingsChange({ ...settings, showDraw: !settings.showDraw })}
-                        style={{
-                            ...styles.toggle,
-                            backgroundColor: settings.showDraw ? "#002366" : "#e5e7eb",
-                            color: settings.showDraw ? "#ffffff" : "#111111",
-                        }}
-                    >
-                        {settings.showDraw ? "On" : "Off"}
-                    </button>
-                </div>
-
-                <div style={styles.toggleRow}>
-                    <span style={styles.toggleLabel}>Show Calm Corner</span>
-                    <button
-                        onClick={() => onSettingsChange({ ...settings, showCalmCorner: !settings.showCalmCorner })}
-                        style={{
-                            ...styles.toggle,
-                            backgroundColor: settings.showCalmCorner ? "#002366" : "#e5e7eb",
-                            color: settings.showCalmCorner ? "#ffffff" : "#111111",
-                        }}
-                    >
-                        {settings.showCalmCorner ? "On" : "Off"}
-                    </button>
-                </div>
-
-                <div style={styles.toggleRow}>
-                    <span style={styles.toggleLabel}>Simplified Mode</span>
-                    <button
-                        onClick={() => onSettingsChange({ ...settings, simplifiedMode: !settings.simplifiedMode })}
-                        style={{
-                            ...styles.toggle,
-                            backgroundColor: settings.simplifiedMode ? "#002366" : "#e5e7eb",
-                            color: settings.simplifiedMode ? "#ffffff" : "#111111",
-                        }}
-                    >
-                        {settings.simplifiedMode ? "On" : "Off"}
-                    </button>
-                </div>
-                <div style={styles.toggleRow}>
-                    <span style={styles.toggleLabel}>Learning Mode</span>
-                    <button
-                        onClick={() => onSettingsChange({ ...settings, learningMode: !settings.learningMode })}
-                        style={{
-                            ...styles.toggle,
-                            backgroundColor: settings.learningMode ? "#002366" : "#e5e7eb",
-                            color: settings.learningMode ? "#ffffff" : "#111111",
-                        }}
-                    >
-                        {settings.learningMode ? "On" : "Off"}
-                    </button>
-                </div>
-                <div style={styles.toggleRow}>
-                    <span style={styles.toggleLabel}>Tap Sounds</span>
-                    <button
-                        onClick={() => onSettingsChange({ ...settings, tapSounds: !settings.tapSounds })}
-                        style={{
-                            ...styles.toggle,
-                            backgroundColor: settings.tapSounds ? "#002366" : "#e5e7eb",
-                            color: settings.tapSounds ? "#ffffff" : "#111111",
-                        }}
-                    >
-                        {settings.tapSounds ? "On" : "Off"}
-                    </button>
-                </div>
-                <div style={styles.toggleRow}>
-                    <span style={styles.toggleLabel}>Show Rhymes Corner</span>
-                    <button
-                        onClick={() => onSettingsChange({ ...settings, showRhymes: !settings.showRhymes })}
-                        style={{
-                            ...styles.toggle,
-                            backgroundColor: settings.showRhymes ? "#002366" : "#e5e7eb",
-                            color: settings.showRhymes ? "#ffffff" : "#111111",
-                        }}
-                    >
-                        {settings.showRhymes ? "On" : "Off"}
-                    </button>
-                </div>
+                {[
+                    { label: "Show Quick Tappit", key: "showQuickTappit" },
+                    { label: "Show Draw Button", key: "showDraw" },
+                    { label: "Show Calm Corner", key: "showCalmCorner" },
+                    { label: "Show Rhymes Corner", key: "showRhymes" },
+                    { label: "Simplified Mode", key: "simplifiedMode" },
+                    { label: "Learning Mode", key: "learningMode" },
+                    { label: "Tap Sounds", key: "tapSounds" },
+                ].map(({ label, key }) => (
+                    <div key={key} style={styles.toggleRow}>
+                        <span style={styles.toggleLabel}>{label}</span>
+                        <button
+                            onClick={() => onSettingsChange({ ...settings, [key]: !settings[key] })}
+                            style={{
+                                ...styles.toggle,
+                                backgroundColor: settings[key] ? "#002366" : "#e5e7eb",
+                                color: settings[key] ? "#ffffff" : "#111111",
+                            }}
+                        >
+                            {settings[key] ? "On" : "Off"}
+                        </button>
+                    </div>
+                ))}
             </section>
 
             {/* Section 3 — Appearance */}
             <section style={styles.section}>
                 <h2 style={styles.sectionHeading}>🎨 Appearance</h2>
-
                 <div style={styles.field}>
                     <label style={styles.label}>Theme</label>
                     <div style={styles.themeRow}>
-                        {["blue", "pink", "white", "dark", "energy"].map((t) => (
+                        {[
+                            { key: "blue", emoji: "☀️" },
+                            { key: "pink", emoji: "🌸" },
+                            { key: "white", emoji: "⬜" },
+                            { key: "dark", emoji: "🌙" },
+                            { key: "energy", emoji: "⚡" },
+                        ].map(({ key, emoji }) => (
                             <button
-                                key={t}
-                                onClick={() => onSettingsChange({ ...settings, theme: t })}
+                                key={key}
+                                onClick={() => onSettingsChange({ ...settings, theme: key })}
                                 style={{
                                     ...styles.themeButton,
-                                    border: settings.theme === t ? "3px solid #002366" : "3px solid #e5e7eb",
+                                    border: settings.theme === key ? "3px solid #002366" : "3px solid #e5e7eb",
                                 }}
                             >
-                                {t === "blue" ? "☀️" : t === "pink" ? "🌸" : t === "white" ? "⬜" : t === "dark" ? "🌙" : "⚡"}so A they have to sign
-                                <span style={styles.themeLabel}>{t}</span>
+                                <span style={{ fontSize: "1.4rem" }}>{emoji}</span>
+                                <span style={styles.themeLabel}>{key}</span>
                             </button>
                         ))}
                     </div>
@@ -209,6 +136,7 @@ const styles = {
         alignItems: "center",
         gap: "1rem",
         marginBottom: "1.5rem",
+        flexWrap: "wrap",
     },
     backButton: {
         minHeight: "44px",
@@ -227,6 +155,7 @@ const styles = {
         fontWeight: "800",
         color: "#002366",
         margin: 0,
+        flex: 1,
     },
     section: {
         backgroundColor: "#ffffff",
@@ -281,6 +210,7 @@ const styles = {
         fontWeight: "700",
         cursor: "pointer",
         fontSize: "0.9rem",
+        fontFamily: "inherit",
     },
     themeRow: {
         display: "flex",
@@ -298,13 +228,14 @@ const styles = {
         alignItems: "center",
         justifyContent: "center",
         gap: "0.25rem",
-        fontSize: "1.4rem",
+        fontFamily: "inherit",
     },
     themeLabel: {
         fontSize: "0.7rem",
         fontWeight: "600",
         color: "#374151",
         textTransform: "capitalize",
+        fontFamily: "inherit",
     },
     switchButton: {
         minHeight: "44px",
