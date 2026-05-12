@@ -99,7 +99,7 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
         theme: "blue",
         tapSounds: false,
         learningMode: false,
-        showRhymes: false,
+        showRhymes: true,
     };
 
     const settingsKey = activeProfile ? `mochiSettings_${activeProfile.id}` : "mochiSettings_guest";
