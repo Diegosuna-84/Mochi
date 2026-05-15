@@ -5,12 +5,14 @@ import { RouterProvider } from "react-router-dom";  // Import RouterProvider to 
 import { router } from "./routes";  // Import the router configuration
 import { StoreProvider } from './hooks/useGlobalReducer';  // Import the StoreProvider for global state management
 import { BackendURL } from './components/BackendURL';
+import { Analytics } from '@vercel/analytics/react';
 
 const Main = () => {
     
     if(! import.meta.env.VITE_BACKEND_URL ||  import.meta.env.VITE_BACKEND_URL == "") return (
         <React.StrictMode>
               <BackendURL/ >
+              <Analytics />
         </React.StrictMode>
         );
     return (
@@ -20,6 +22,7 @@ const Main = () => {
                 {/* Set up routing for the application */} 
                 <RouterProvider router={router}>
                 </RouterProvider>
+                <Analytics />
             </StoreProvider>
         </React.StrictMode>
     );
