@@ -96,6 +96,7 @@ pipenv run python src/app.py
 ## Environment Variables
 
 DATABASE_URL=postgresql://user:password@localhost:5432/mochi
+
 VITE_BACKEND_URL=http://localhost:3001
 
 ---
