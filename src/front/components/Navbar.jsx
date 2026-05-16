@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export const Navbar = ({ onSettingsClick }) => {
+export const Navbar = ({ onSettingsClick, onAboutClick }) => {
     return (
         <nav style={styles.nav}>
             <Link to="/" style={styles.link}>
@@ -13,6 +13,9 @@ export const Navbar = ({ onSettingsClick }) => {
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSdjJCN0q_dzvchhAsbbNdBQ2kSGEsc_VxtPn2tDbfYHDahx_Q/viewform" target="_blank" rel="noopener noreferrer" style={styles.feedbackButton}>
                     💬 Feedback
                 </a>
+                <button onClick={onAboutClick} style={styles.aboutButton}>
+                    🍡 About Mochi
+                </button>
                 <button onClick={onSettingsClick} style={styles.settingsButton} aria-label="Open Settings">
                     ⚙️ Settings
                 </button>
@@ -72,6 +75,18 @@ const styles = {
         textDecoration: "none",
         display: "flex",
         alignItems: "center",
+    },
+    aboutButton: {
+        minHeight: "44px",
+        padding: "0.5rem 1rem",
+        backgroundColor: "#e0f2fe",
+        color: "#002366",
+        border: "none",
+        borderRadius: "50px",
+        fontWeight: "700",
+        fontSize: "0.95rem",
+        cursor: "pointer",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
     },
     settingsButton: {
         minHeight: "44px",
