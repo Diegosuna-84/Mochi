@@ -9,13 +9,14 @@ export const Navbar = ({ onSettingsClick }) => {
                     <span style={styles.title}>Mochi</span>
                 </div>
             </Link>
-            <button
-                onClick={onSettingsClick}
-                style={styles.settingsButton}
-                aria-label="Open Settings"
-            >
-                ⚙️ Settings
-            </button>
+            <div style={styles.buttonGroup}>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdjJCN0q_dzvchhAsbbNdBQ2kSGEsc_VxtPn2tDbfYHDahx_Q/viewform" target="_blank" rel="noopener noreferrer" style={styles.feedbackButton}>
+                    💬 Feedback
+                </a>
+                <button onClick={onSettingsClick} style={styles.settingsButton} aria-label="Open Settings">
+                    ⚙️ Settings
+                </button>
+            </div>
         </nav>
     );
 };
@@ -51,6 +52,26 @@ const styles = {
         color: "#002366",
         letterSpacing: "2px",
         fontFamily: "Georgia, serif",
+    },
+    buttonGroup: {
+        display: "flex",
+        alignItems: "center",
+        gap: "0.75rem",
+    },
+    feedbackButton: {
+        minHeight: "44px",
+        padding: "0.5rem 1rem",
+        backgroundColor: "#fbbf24",
+        color: "#422006",
+        border: "none",
+        borderRadius: "50px",
+        fontWeight: "700",
+        fontSize: "0.95rem",
+        cursor: "pointer",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+        textDecoration: "none",
+        display: "flex",
+        alignItems: "center",
     },
     settingsButton: {
         minHeight: "44px",
