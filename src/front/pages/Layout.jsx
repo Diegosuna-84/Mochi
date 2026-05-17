@@ -9,12 +9,18 @@ export const Layout = () => {
     const [showSettings, setShowSettings] = useState(false);
     const [showAbout, setShowAbout] = useState(false);
 
+    const handleLogoClick = () => {
+        setShowSettings(false);
+        setShowAbout(false);
+    };
+
     if (showAbout) {
         return (
             <>
                 <Navbar
-                    onSettingsClick={() => setShowSettings(true)}
+                    onSettingsClick={() => { setShowAbout(false); setShowSettings(true); }}
                     onAboutClick={() => setShowAbout(true)}
+                    onLogoClick={handleLogoClick}
                 />
                 <AboutMochi onBack={() => setShowAbout(false)} />
             </>
@@ -26,6 +32,7 @@ export const Layout = () => {
             <Navbar
                 onSettingsClick={() => setShowSettings(true)}
                 onAboutClick={() => setShowAbout(true)}
+                onLogoClick={handleLogoClick}
             />
             <Outlet context={{ showSettings, setShowSettings }} />
             <Footer />
