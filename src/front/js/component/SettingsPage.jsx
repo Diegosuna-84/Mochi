@@ -9,6 +9,9 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
         window.speechSynthesis.onvoiceschanged = loadVoices;
     }, []);
 
+    const lang = profile.language || "en";
+    const filteredVoices = voices.filter(v => v.lang.startsWith(lang));
+
     return (
         <div style={styles.wrapper}>
             <div style={styles.topBar}>
@@ -34,7 +37,7 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
                 </div>
                 <div style={styles.field}>
                     <label style={styles.label}>Language</label>
-                    <select value={profile.language || "en"} onChange={(e) => onProfileChange({ ...profile, language: e.target.value })} style={styles.input}>
+                    <select value={lang} onChange={(e) => onProfileChange({ ...profile, language: e.target.value, voicePreference: "" })} style={styles.input}>
                         <option value="en">English</option>
                         <option value="es">Español</option>
                     </select>
@@ -43,7 +46,7 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
                     <label style={styles.label}>Preferred Voice</label>
                     <select value={profile.voicePreference} onChange={(e) => onProfileChange({ ...profile, voicePreference: e.target.value })} style={styles.input}>
                         <option value="">Default voice</option>
-                        {voices.map((voice) => (
+                        {filteredVoices.map((voice) => (
                             <option key={voice.name} value={voice.name}>{voice.name} ({voice.lang})</option>
                         ))}
                     </select>
