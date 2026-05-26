@@ -14,6 +14,10 @@ export const Layout = () => {
         setShowAbout(false);
     };
 
+    const handleFeedbackClick = () => {
+        window.open("https://docs.google.com/forms/d/e/1FAIpQLSdjJCN0q_dzvchhAsbbNdBQ2kSGEsc_VxtPn2tDbfYHDahx_Q/viewform", "_blank", "noopener,noreferrer");
+    };
+
     if (showAbout) {
         return (
             <>
@@ -21,6 +25,7 @@ export const Layout = () => {
                     onSettingsClick={() => { setShowAbout(false); setShowSettings(true); }}
                     onAboutClick={() => setShowAbout(true)}
                     onLogoClick={handleLogoClick}
+                    onFeedbackClick={handleFeedbackClick}
                 />
                 <AboutMochi onBack={() => setShowAbout(false)} />
             </>
@@ -33,6 +38,7 @@ export const Layout = () => {
                 onSettingsClick={() => setShowSettings(true)}
                 onAboutClick={() => setShowAbout(true)}
                 onLogoClick={handleLogoClick}
+                onFeedbackClick={handleFeedbackClick}
             />
             <Outlet context={{ showSettings, setShowSettings }} />
             <Footer />

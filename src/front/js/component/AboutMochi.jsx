@@ -68,6 +68,10 @@ export const AboutMochi = ({ onBack }) => {
                         <p style={styles.tipText}><strong>Rhymes Corner</strong> — nursery rhymes for kids. Enable it in Settings.</p>
                     </div>
                     <div style={styles.tip}>
+                        <span style={styles.tipEmoji}>🔒</span>
+                        <p style={styles.tipText}><strong>Caregiver Lock</strong> — prevents kids from accidentally opening Settings, Feedback, or About Mochi. To turn it on, press and hold ⚙️ Settings for 2 seconds, go to Board Settings, and toggle Caregiver Lock on. To turn it off, press and hold ⚙️ Settings again and toggle it off.</p>
+                    </div>
+                    <div style={styles.tip}>
                         <span style={styles.tipEmoji}>📴</span>
                         <p style={styles.tipText}><strong>Offline</strong> — Mochi works without internet. Core communication is always available.</p>
                     </div>

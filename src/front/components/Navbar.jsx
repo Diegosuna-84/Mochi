@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useLongPress } from "../js/component/useLongPress";
 
-export const Navbar = ({ onSettingsClick, onAboutClick, onLogoClick }) => {
+
+export const Navbar = ({ onSettingsClick, onAboutClick, onLogoClick, onFeedbackClick }) => {
+    const profile = JSON.parse(localStorage.getItem("mochiProfile"));
+    const settings = JSON.parse(localStorage.getItem(`mochiSettings_${profile?.id}`));
+    const caregiverLockEnabled = settings?.caregiverLockEnabled ?? false;
+    const longPressProps = useLongPress(() => {
+        onSettingsClick();
+    }, 2000);
     return (
         <nav style={styles.nav}>
             <style>{`
@@ -17,15 +26,30 @@ export const Navbar = ({ onSettingsClick, onAboutClick, onLogoClick }) => {
                 </div>
             </div>
             <div style={styles.buttonGroup}>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdjJCN0q_dzvchhAsbbNdBQ2kSGEsc_VxtPn2tDbfYHDahx_Q/viewform" target="_blank" rel="noopener noreferrer" style={styles.navBtn} aria-label="Feedback">
+                <button
+                    {...longPressProps}
+                    onClick={caregiverLockEnabled ? undefined : onFeedbackClick}
+                    style={{ ...styles.navBtn }}
+                    aria-label="Feedback"
+                >
                     <span style={styles.btnIcon}>💬</span>
                     <span className="mochi-btn-label" style={styles.btnLabel}>Feedback</span>
-                </a>
-                <button onClick={onAboutClick} style={{ ...styles.navBtn, backgroundColor: "#e0f2fe", color: "#002366" }} aria-label="About Mochi">
+                </button>
+                <button
+                    {...longPressProps}
+                    onClick={caregiverLockEnabled ? undefined : onAboutClick}
+                    style={{ ...styles.navBtn, backgroundColor: "#e0f2fe", color: "#002366" }}
+                    aria-label="About Mochi"
+                >
                     <span style={styles.btnIcon}>🍡</span>
                     <span className="mochi-btn-label" style={styles.btnLabel}>About Mochi</span>
                 </button>
-                <button onClick={onSettingsClick} style={{ ...styles.navBtn, backgroundColor: "#ffffff", color: "#002366" }} aria-label="Settings">
+                <button
+                    {...longPressProps}
+                    onClick={caregiverLockEnabled ? undefined : onSettingsClick}
+                    style={{ ...styles.navBtn, backgroundColor: "#ffffff", color: "#002366" }}
+                    aria-label="Settings"
+                >
                     <span style={styles.btnIcon}>⚙️</span>
                     <span className="mochi-btn-label" style={styles.btnLabel}>Settings</span>
                 </button>
