@@ -184,6 +184,16 @@ const CATEGORIES = [
             { word: "10", es: "10", emoji: "🔟" },
         ],
     },
+    {
+        label: "⭐ Vowels",
+        symbols: [
+            { word: "Ay", es: "A", emoji: "A" },
+            { word: "Ee", es: "E", emoji: "E" },
+            { word: "Eye", es: "I", emoji: "I" },
+            { word: "Oh", es: "O", emoji: "O" },
+            { word: "You", es: "U", emoji: "U" },
+        ]
+    }
 ];
 
 const quickTappits = [
