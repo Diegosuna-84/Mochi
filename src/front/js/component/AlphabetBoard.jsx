@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { SectionShell } from "./SectionShell";
 
-export const AlphabetBoard = ({ onBack, activeProfile }) => {
+export const AlphabetBoard = ({ onBack, activeProfile, lang = "en" }) => {
     const [word, setWord] = useState("");
 
     const speak = (text) => {
@@ -14,11 +15,7 @@ export const AlphabetBoard = ({ onBack, activeProfile }) => {
     };
 
     return (
-        <div style={styles.wrapper}>
-            <div style={styles.topBar}>
-                <button onClick={onBack} style={styles.backButton}>← Back</button>
-                <h1 style={styles.title}>🔤 Alphabet</h1>
-            </div>
+        <SectionShell title="🔤 Alphabet" onBack={onBack} lang={lang}>
             <div style={styles.wordDisplay}>
                 <span style={styles.wordText}>{word || "..."}</span>
             </div>
@@ -34,15 +31,11 @@ export const AlphabetBoard = ({ onBack, activeProfile }) => {
                     </button>
                 ))}
             </div>
-        </div>
+        </SectionShell>
     );
 };
 
 const styles = {
-    wrapper: { maxWidth: "680px", margin: "0 auto", padding: "1rem", minHeight: "100vh", backgroundColor: "#f0f9ff" },
-    topBar: { display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" },
-    backButton: { minHeight: "44px", minWidth: "80px", padding: "0.5rem 1rem", border: "2px solid #1f2937", borderRadius: "8px", backgroundColor: "#e5e7eb", color: "#111111", fontWeight: "700", cursor: "pointer", fontSize: "1rem" },
-    title: { fontSize: "1.4rem", fontWeight: "800", color: "#002366", margin: 0 },
     wordDisplay: { backgroundColor: "#ffffff", borderRadius: "16px", padding: "1.25rem", marginBottom: "1rem", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", minHeight: "64px", display: "flex", alignItems: "center" },
     wordText: { fontSize: "2rem", fontWeight: "800", color: "#002366", letterSpacing: "0.15em" },
     controls: { display: "flex", gap: "0.75rem", marginBottom: "1rem", flexWrap: "wrap" },

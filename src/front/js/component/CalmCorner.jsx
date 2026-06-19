@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { SectionShell } from "./SectionShell";
 
 const MODES = [
     { label: "Bubbles", emoji: "🫧" },
@@ -8,7 +9,7 @@ const MODES = [
 
 const COLORS = ["#a5f3fc", "#bbf7d0", "#fde68a", "#fecaca", "#ddd6fe", "#fed7aa"];
 
-export const CalmCorner = ({ onBack }) => {
+export const CalmCorner = ({ onBack, lang = "en" }) => {
     const [mode, setMode] = useState("Bubbles");
     const [breatheIn, setBreatheIn] = useState(true);
     const [colorIndex, setColorIndex] = useState(0);
@@ -73,23 +74,25 @@ export const CalmCorner = ({ onBack }) => {
         oscillator.stop(ctx.currentTime + 3);
     };
 
-    return (
-        <div style={styles.wrapper}>
-            {/* Top bar */}
-            <div style={styles.topBar}>
-                <button onClick={onBack} style={styles.backButton}>
-                    ← Back
-                </button>
-                <div style={styles.soundRow}>
-                    <button onClick={() => playSound("chime")} style={styles.soundButton}>
-                        🔔 Chime
-                    </button>
-                    <button onClick={() => playSound("wave")} style={styles.soundButton}>
-                        🌊 Wave
-                    </button>
-                </div>
-            </div>
+    const soundButtons = (
+        <>
+            <button onClick={() => playSound("chime")} style={styles.soundButton}>
+                🔔 Chime
+            </button>
+            <button onClick={() => playSound("wave")} style={styles.soundButton}>
+                🌊 Wave
+            </button>
+        </>
+    );
 
+    return (
+        <SectionShell
+            title="🌿 Calm Corner"
+            onBack={onBack}
+            lang={lang}
+            variant="fill"
+            headerActions={soundButtons}
+        >
             {/* Mode selector */}
             <div style={styles.modeRow}>
                 {MODES.map((m) => (
@@ -166,46 +169,11 @@ export const CalmCorner = ({ onBack }) => {
                 )}
 
             </div>
-        </div>
+        </SectionShell>
     );
 };
 
 const styles = {
-    wrapper: {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "#f0f9ff",
-        display: "flex",
-        flexDirection: "column",
-        zIndex: 1000
-    },
-    topBar: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "0.75rem 1rem",
-        backgroundColor: "#f9fafb",
-        borderBottom: "2px solid #e5e7eb"
-    },
-    backButton: {
-        minHeight: "44px",
-        minWidth: "80px",
-        padding: "0.5rem 1rem",
-        border: "2px solid #1f2937",
-        borderRadius: "8px",
-        backgroundColor: "#e5e7eb",
-        color: "#111111",
-        fontWeight: "700",
-        cursor: "pointer",
-        fontSize: "1rem"
-    },
-    soundRow: {
-        display: "flex",
-        gap: "0.5rem"
-    },
     soundButton: {
         minHeight: "44px",
         padding: "0.5rem 1rem",
@@ -223,7 +191,8 @@ const styles = {
         padding: "0.75rem 1rem",
         backgroundColor: "#f9fafb",
         borderBottom: "2px solid #e5e7eb",
-        justifyContent: "center"
+        justifyContent: "center",
+        flexShrink: 0
     },
     modeButton: {
         minHeight: "70px",

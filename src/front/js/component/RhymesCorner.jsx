@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { SectionShell } from "./SectionShell";
 
 const RHYMES = [
     { title: "Wheels on the Bus", emoji: "🚌", file: "/audio/wheels-on-the-bus.mp3" },
@@ -11,7 +12,7 @@ const RHYMES = [
     { title: "Itsy Bitsy Spider", emoji: "🕷️", file: "/audio/itsy-bitsy-spider.mp3" },
 ];
 
-export const RhymesCorner = ({ onBack }) => {
+export const RhymesCorner = ({ onBack, lang = "en" }) => {
     const [playing, setPlaying] = useState(null);
     const audioRef = useRef(null);
 
@@ -40,20 +41,20 @@ export const RhymesCorner = ({ onBack }) => {
     };
 
     return (
-        <div style={styles.wrapper}>
-            {/* Top Bar */}
-            <div style={styles.topBar}>
-                <button onClick={() => { handleStop(); onBack(); }} style={styles.backButton}>
-                    ← Back
-                </button>
-                <h1 style={styles.title}>🎵 Rhymes Corner</h1>
-                {playing && (
+        <SectionShell
+            title="🎵 Rhymes Corner"
+            onBack={() => { handleStop(); onBack(); }}
+            lang={lang}
+            maxWidth={null}
+            background="linear-gradient(135deg, #e0f2fe 0%, #fce7f3 100%)"
+            headerActions={
+                playing && (
                     <button onClick={handleStop} style={styles.stopButton}>
                         ⏹ Stop
                     </button>
-                )}
-            </div>
-
+                )
+            }
+        >
             {/* Now Playing */}
             {playing && (
                 <div style={styles.nowPlaying}>
@@ -84,42 +85,11 @@ export const RhymesCorner = ({ onBack }) => {
                     </button>
                 ))}
             </div>
-        </div>
+        </SectionShell>
     );
 };
 
 const styles = {
-    wrapper: {
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #e0f2fe 0%, #fce7f3 100%)",
-        padding: "1rem",
-    },
-    topBar: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginBottom: "1rem",
-        flexWrap: "wrap",
-        gap: "0.5rem",
-    },
-    backButton: {
-        minHeight: "44px",
-        minWidth: "80px",
-        padding: "0.5rem 1rem",
-        border: "2px solid #1f2937",
-        borderRadius: "8px",
-        backgroundColor: "#e5e7eb",
-        color: "#111111",
-        fontWeight: "700",
-        cursor: "pointer",
-        fontSize: "1rem",
-    },
-    title: {
-        fontSize: "1.5rem",
-        fontWeight: "800",
-        color: "#002366",
-        margin: 0,
-    },
     stopButton: {
         minHeight: "44px",
         padding: "0.5rem 1rem",

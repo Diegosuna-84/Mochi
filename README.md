@@ -58,6 +58,7 @@ No downloads. No subscriptions. No accounts required. Always free.
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js v20+
 - Python 3.13+
 - PostgreSQL
@@ -75,10 +76,6 @@ npm install
 
 # Install backend dependencies
 pipenv install
-
-# Set up environment variables
-cp .env.example .env
-# Add your DATABASE_URL and VITE_BACKEND_URL
 ```
 
 ### Running locally
@@ -90,14 +87,6 @@ npm run dev
 # Start backend
 pipenv run python src/app.py
 ```
-
----
-
-## Environment Variables
-
-DATABASE_URL=postgresql://user:password@localhost:5432/mochi
-
-VITE_BACKEND_URL=http://localhost:3001
 
 ---
 

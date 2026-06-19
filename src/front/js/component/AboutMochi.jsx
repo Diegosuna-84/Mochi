@@ -1,13 +1,12 @@
 import React from "react";
+import { SectionShell } from "./SectionShell";
 
 export const AboutMochi = ({ onBack }) => {
-    return (
-        <div style={styles.wrapper}>
-            <div style={styles.topBar}>
-                <button onClick={onBack} style={styles.backButton}>← Back</button>
-                <h1 style={styles.title}>🍡 About Mochi</h1>
-            </div>
+    const profile = JSON.parse(localStorage.getItem("mochiProfile"));
+    const lang = profile?.language || "en";
 
+    return (
+        <SectionShell title="🍡 About Mochi" onBack={onBack} lang={lang}>
             <section style={styles.section}>
                 <h2 style={styles.sectionHeading}>What is Mochi?</h2>
                 <p style={styles.text}>Mochi is a free, accessible tap-to-speak communication tool built for non-verbal and minimally verbal users, starting with autism-related communication support needs.</p>
@@ -86,42 +85,11 @@ export const AboutMochi = ({ onBack }) => {
             </section>
 
             <p style={styles.footer}>© 2025 Kado Web Studio LLC. All rights reserved.</p>
-        </div>
+        </SectionShell>
     );
 };
 
 const styles = {
-    wrapper: {
-        maxWidth: "680px",
-        margin: "0 auto",
-        padding: "1rem",
-        minHeight: "100vh",
-        backgroundColor: "#f0f9ff",
-    },
-    topBar: {
-        display: "flex",
-        alignItems: "center",
-        gap: "1rem",
-        marginBottom: "1.5rem",
-    },
-    backButton: {
-        minHeight: "44px",
-        minWidth: "80px",
-        padding: "0.5rem 1rem",
-        border: "2px solid #1f2937",
-        borderRadius: "8px",
-        backgroundColor: "#e5e7eb",
-        color: "#111111",
-        fontWeight: "700",
-        cursor: "pointer",
-        fontSize: "1rem",
-    },
-    title: {
-        fontSize: "1.4rem",
-        fontWeight: "800",
-        color: "#002366",
-        margin: 0,
-    },
     section: {
         backgroundColor: "#ffffff",
         borderRadius: "16px",

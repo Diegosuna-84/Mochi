@@ -6,7 +6,7 @@ import { ProfilePicker } from "../js/component/ProfilePicker.jsx";
 const GUEST_PROFILE = { id: "guest", name: "Guest", ageGroup: "", voicePreference: "" };
 
 export const Home = () => {
-    const { showSettings, setShowSettings } = useOutletContext();
+    const { showSettings, setShowSettings, setSectionActive } = useOutletContext();
 
     const [activeProfile, setActiveProfile] = useState(() => {
         const activeId = localStorage.getItem("mochiActiveProfile");
@@ -36,12 +36,13 @@ export const Home = () => {
     }
 
     return (
-        <div>
+        <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
             <TappitBoard
                 key={activeProfile?.id || "guest"}
                 showSettings={showSettings}
                 setShowSettings={setShowSettings}
                 activeProfile={activeProfile || GUEST_PROFILE}
+                setSectionActive={setSectionActive}
             />
         </div>
     );

@@ -203,7 +203,7 @@ const quickTappits = [
     { word: "Break", es: "Descanso", emoji: "☕" },
 ];
 
-export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) => {
+export const TappitBoard = ({ showSettings, setShowSettings, activeProfile, setSectionActive }) => {
     const [phrase, setPhrase] = useState([]);
     const [welcomeSeen, setWelcomeSeen] = useState(() => !!localStorage.getItem("mochiWelcomeSeen"));
     const [showDrawing, setShowDrawing] = useState(false);
@@ -247,6 +247,25 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
     useEffect(() => {
         localStorage.setItem(settingsKey, JSON.stringify(settings));
     }, [settings]);
+
+    // Tells Layout.jsx whether any section (Settings, Draw, Calm, Rhymes,
+    // Alphabet) is currently open, so it knows when to hide the Footer.
+    useEffect(() => {
+        const anySectionOpen = showSettings || showDrawing || showCalm || showRhymes || showAlphabet;
+        if (typeof setSectionActive === "function") {
+            setSectionActive(anySectionOpen);
+        }
+    }, [showSettings, showDrawing, showCalm, showRhymes, showAlphabet]);
+
+    // Make sure Layout's Footer comes back if TappitBoard unmounts
+    // while a section was still open (e.g. profile switch).
+    useEffect(() => {
+        return () => {
+            if (typeof setSectionActive === "function") {
+                setSectionActive(false);
+            }
+        };
+    }, []);
 
     const syncProfile = async (updatedProfile) => {
         try {
@@ -321,13 +340,14 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
             onSettingsChange={(updated) => setSettings(updated)}
             onBack={() => setShowSettings(false)}
             onSwitchProfile={() => { localStorage.removeItem("mochiActiveProfile"); window.location.reload(); }}
+            lang={lang}
         />
     );
-    if (showDrawing) return <DrawingArea onBack={() => setShowDrawing(false)} />;
-    if (showCalm) return <CalmCorner onBack={() => setShowCalm(false)} />;
-    if (showRhymes) return <RhymesCorner onBack={() => setShowRhymes(false)} />;
-    if (showAlphabet) return <AlphabetBoard onBack={() => setShowAlphabet(false)} activeProfile={activeProfile} />;
-    
+    if (showDrawing) return <DrawingArea onBack={() => setShowDrawing(false)} lang={lang} />;
+    if (showCalm) return <CalmCorner onBack={() => setShowCalm(false)} lang={lang} />;
+    if (showRhymes) return <RhymesCorner onBack={() => setShowRhymes(false)} lang={lang} />;
+    if (showAlphabet) return <AlphabetBoard onBack={() => setShowAlphabet(false)} activeProfile={activeProfile} lang={lang} />;
+
 
 return (
     <div style={{ ...styles.wrapper, backgroundColor: t.bg }}>
@@ -406,7 +426,7 @@ return (
 };
 
 const styles = {
-    wrapper: { maxWidth: "100%", margin: "0 auto", padding: "1rem", paddingBottom: "120px", minHeight: "100vh" },
+    wrapper: { maxWidth: "100%", margin: "0 auto", padding: "1rem", paddingBottom: "120px", flex: 1, minHeight: "100%" },
     quickSection: { marginBottom: "1.5rem" },
     categorySection: { marginBottom: "1.5rem" },
     sectionHeading: { margin: "0 0 0.75rem 0", fontSize: "1.1rem", fontWeight: "700" },

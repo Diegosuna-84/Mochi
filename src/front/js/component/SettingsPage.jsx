@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { SectionShell } from "./SectionShell";
 
 export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsChange, onBack, onSwitchProfile }) => {
     const [voices, setVoices] = useState([]);
@@ -13,13 +14,14 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
     const filteredVoices = voices.filter(v => v.lang.startsWith(lang));
 
     return (
-        <div style={styles.wrapper}>
-            <div style={styles.topBar}>
-                <button onClick={onBack} style={styles.backButton}>← Back</button>
-                <h1 style={styles.pageTitle}>Profile & Settings</h1>
+        <SectionShell
+            title="Profile & Settings"
+            onBack={onBack}
+            lang={lang}
+            headerActions={
                 <button onClick={onSwitchProfile} style={styles.switchButton}>Switch Profile</button>
-            </div>
-
+            }
+        >
             <section style={styles.section}>
                 <h2 style={styles.sectionHeading}>👤 Profile</h2>
                 <div style={styles.field}>
@@ -95,15 +97,11 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
                     </div>
                 </div>
             </section>
-        </div>
+        </SectionShell>
     );
 };
 
 const styles = {
-    wrapper: { maxWidth: "680px", margin: "0 auto", padding: "1rem", minHeight: "100vh", backgroundColor: "#f0f9ff" },
-    topBar: { display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem", flexWrap: "wrap" },
-    backButton: { minHeight: "44px", minWidth: "80px", padding: "0.5rem 1rem", border: "2px solid #1f2937", borderRadius: "8px", backgroundColor: "#e5e7eb", color: "#111111", fontWeight: "700", cursor: "pointer", fontSize: "1rem" },
-    pageTitle: { fontSize: "1.4rem", fontWeight: "800", color: "#002366", margin: 0, flex: 1 },
     section: { backgroundColor: "#ffffff", borderRadius: "16px", padding: "1.25rem", marginBottom: "1rem", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" },
     sectionHeading: { fontSize: "1.1rem", fontWeight: "700", color: "#002366", margin: "0 0 1rem 0" },
     field: { marginBottom: "1rem" },
