@@ -19,9 +19,6 @@ export const DrawingArea = ({ onBack, lang = "en" }) => {
     const [selectedColor, setSelectedColor] = useState("#111111");
     const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
 
-    // Measure the actual space available for the canvas (instead of the
-    // old window.innerHeight - 140 guess) so it fits exactly below the
-    // Navbar + SectionShell top bar + color row, on any screen.
     useLayoutEffect(() => {
         const measure = () => {
             if (canvasWrapRef.current) {
@@ -37,15 +34,9 @@ export const DrawingArea = ({ onBack, lang = "en" }) => {
     const getPos = (e, canvas) => {
         const rect = canvas.getBoundingClientRect();
         if (e.touches) {
-            return {
-                x: e.touches[0].clientX - rect.left,
-                y: e.touches[0].clientY - rect.top
-            };
+            return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
         }
-        return {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top
-        };
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
 
     const startDraw = (e) => {
@@ -70,9 +61,7 @@ export const DrawingArea = ({ onBack, lang = "en" }) => {
         ctx.stroke();
     };
 
-    const stopDraw = () => {
-        isDrawing.current = false;
-    };
+    const stopDraw = () => { isDrawing.current = false; };
 
     const clearCanvas = () => {
         const canvas = canvasRef.current;
@@ -89,9 +78,7 @@ export const DrawingArea = ({ onBack, lang = "en" }) => {
             variant="fill"
             background="#ffffff"
             headerActions={
-                <button onClick={clearCanvas} style={styles.clearButton}>
-                    Clear
-                </button>
+                <button onClick={clearCanvas} style={styles.clearButton}>Clear</button>
             }
         >
             <div style={styles.colorRow}>
@@ -102,12 +89,8 @@ export const DrawingArea = ({ onBack, lang = "en" }) => {
                         style={{
                             ...styles.colorButton,
                             backgroundColor: color.value,
-                            border: selectedColor === color.value
-                                ? "3px solid #111111"
-                                : "3px solid transparent",
-                            outline: selectedColor === color.value
-                                ? "2px solid #fbbf24"
-                                : "none"
+                            border: selectedColor === color.value ? "3px solid #111111" : "3px solid transparent",
+                            outline: selectedColor === color.value ? "2px solid #fbbf24" : "none"
                         }}
                         aria-label={color.label}
                     />
@@ -136,35 +119,8 @@ export const DrawingArea = ({ onBack, lang = "en" }) => {
 };
 
 const styles = {
-    clearButton: {
-        minHeight: "44px",
-        minWidth: "80px",
-        padding: "0.5rem 1rem",
-        border: "2px solid #1f2937",
-        borderRadius: "8px",
-        backgroundColor: "#e5e7eb",
-        color: "#111111",
-        fontWeight: "700",
-        cursor: "pointer",
-        fontSize: "1rem"
-    },
-    colorRow: {
-        display: "flex",
-        gap: "0.75rem",
-        padding: "0.75rem 1rem",
-        backgroundColor: "#f9fafb",
-        borderBottom: "2px solid #e5e7eb",
-        flexWrap: "wrap",
-        flexShrink: 0
-    },
-    canvasWrap: {
-        flex: 1,
-        position: "relative",
-        minHeight: "300px"
-    },
-    canvas: {
-        display: "block",
-        backgroundColor: "#ffffff",
-        touchAction: "none"
-    }
+    clearButton: { minHeight: "44px", minWidth: "80px", padding: "0.5rem 1rem", border: "2px solid #1f2937", borderRadius: "8px", backgroundColor: "#e5e7eb", color: "#111111", fontWeight: "700", cursor: "pointer", fontSize: "1rem" },
+    colorRow: { display: "flex", gap: "0.75rem", padding: "0.75rem 1rem", backgroundColor: "#f9fafb", borderBottom: "2px solid #e5e7eb", flexWrap: "wrap", flexShrink: 0 },
+    canvasWrap: { flex: 1, position: "relative", minHeight: "300px" },
+    canvas: { display: "block", backgroundColor: "#ffffff", touchAction: "none" }
 };
