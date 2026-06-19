@@ -115,7 +115,7 @@ export const DrawingArea = ({ onBack, lang = "en" }) => {
             </div>
 
             <div ref={canvasWrapRef} style={styles.canvasWrap}>
-                {canvasSize.width > 0 && (
+                {canvasSize.width > 0 && canvasSize.height > 0 && (
                     <canvas
                         ref={canvasRef}
                         width={canvasSize.width}
@@ -160,7 +160,7 @@ const styles = {
     canvasWrap: {
         flex: 1,
         position: "relative",
-        minHeight: 0
+        minHeight: "300px"
     },
     canvas: {
         display: "block",
