@@ -63,6 +63,7 @@ export const SettingsPage = ({ profile, settings, onProfileChange, onSettingsCha
                     { label: "Simplified Mode", key: "simplifiedMode" },
                     { label: "Learning Mode", key: "learningMode" },
                     { label: "Tap Sounds", key: "tapSounds" },
+                    { label: "🔤 Show Alphabet", key: "showAlphabet" },
                     { label: "🔒 Caregiver Lock", key: "caregiverLockEnabled" },
                 ].map(({ label, key }) => (
                     <div key={key} style={styles.toggleRow}>

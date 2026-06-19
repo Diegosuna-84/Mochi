@@ -4,12 +4,13 @@ import { CalmCorner } from "./CalmCorner";
 import { SettingsPage } from "./SettingsPage";
 import { WelcomeBanner } from "./WelcomeBanner";
 import { RhymesCorner } from "./RhymesCorner";
+import { AlphabetBoard } from "./AlphabetBoard";
 
 const THEMES = {
-    blue:   { bg: "#e0f2fe", card: "#ffffff", text: "#111111", border: "#7dd3fc", heading: "#0369a1" },
-    pink:   { bg: "#fce7f3", card: "#ffffff", text: "#111111", border: "#f9a8d4", heading: "#9d174d" },
-    white:  { bg: "#ffffff", card: "#f9fafb", text: "#111111", border: "#d1d5db", heading: "#111111" },
-    dark:   { bg: "#1e1e2e", card: "#2e2e3e", text: "#ffffff", border: "#4b5563", heading: "#93c5fd" },
+    blue: { bg: "#e0f2fe", card: "#ffffff", text: "#111111", border: "#7dd3fc", heading: "#0369a1" },
+    pink: { bg: "#fce7f3", card: "#ffffff", text: "#111111", border: "#f9a8d4", heading: "#9d174d" },
+    white: { bg: "#ffffff", card: "#f9fafb", text: "#111111", border: "#d1d5db", heading: "#111111" },
+    dark: { bg: "#1e1e2e", card: "#2e2e3e", text: "#ffffff", border: "#4b5563", heading: "#93c5fd" },
     energy: { bg: "#fff7ed", card: "#ffffff", text: "#111111", border: "#fb923c", heading: "#ea580c" },
 };
 
@@ -208,6 +209,7 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
     const [showDrawing, setShowDrawing] = useState(false);
     const [showCalm, setShowCalm] = useState(false);
     const [showRhymes, setShowRhymes] = useState(false);
+    const [showAlphabet, setShowAlphabet] = useState(false);
 
     const defaultSettings = {
         showDraw: true,
@@ -218,6 +220,7 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
         tapSounds: false,
         learningMode: false,
         showRhymes: true,
+        showAlphabet: true,
     };
 
     const settingsKey = activeProfile ? `mochiSettings_${activeProfile.id}` : "mochiSettings_guest";
@@ -310,9 +313,6 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
         window.speechSynthesis.speak(utterance);
     };
 
-    if (showDrawing) return <DrawingArea onBack={() => setShowDrawing(false)} />;
-    if (showCalm) return <CalmCorner onBack={() => setShowCalm(false)} />;
-    if (showRhymes) return <RhymesCorner onBack={() => setShowRhymes(false)} />;
     if (showSettings) return (
         <SettingsPage
             profile={profile}
@@ -323,75 +323,86 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
             onSwitchProfile={() => { localStorage.removeItem("mochiActiveProfile"); window.location.reload(); }}
         />
     );
+    if (showDrawing) return <DrawingArea onBack={() => setShowDrawing(false)} />;
+    if (showCalm) return <CalmCorner onBack={() => setShowCalm(false)} />;
+    if (showRhymes) return <RhymesCorner onBack={() => setShowRhymes(false)} />;
+    if (showAlphabet) return <AlphabetBoard onBack={() => setShowAlphabet(false)} activeProfile={activeProfile} />;
+    
 
-    return (
-        <div style={{ ...styles.wrapper, backgroundColor: t.bg }}>
-            {!welcomeSeen && (
-                <WelcomeBanner onDismiss={() => { localStorage.setItem("mochiWelcomeSeen", "true"); setWelcomeSeen(true); }} />
-            )}
+return (
+    <div style={{ ...styles.wrapper, backgroundColor: t.bg }}>
+        {!welcomeSeen && (
+            <WelcomeBanner onDismiss={() => { localStorage.setItem("mochiWelcomeSeen", "true"); setWelcomeSeen(true); }} />
+        )}
 
-            {settings.showQuickTappit && (
-                <section style={styles.quickSection}>
-                    <h2 style={{ ...styles.sectionHeading, color: t.heading }}>Quick Tappit</h2>
-                    <div style={styles.quickRow}>
-                        {quickTappits.map((item) => (
-                            <button key={item.word} type="button" onClick={() => speakQuickWord(getWord(item))} style={{ ...styles.symbolButton, backgroundColor: "#fed7aa", border: "2px solid #c2410c", color: "#431407" }}>
-                                <span style={styles.emoji}>{item.emoji}</span>
-                                <span style={styles.word}>{getWord(item)}</span>
-                            </button>
-                        ))}
-                    </div>
-                </section>
-            )}
+        {settings.showQuickTappit && (
+            <section style={styles.quickSection}>
+                <h2 style={{ ...styles.sectionHeading, color: t.heading }}>Quick Tappit</h2>
+                <div style={styles.quickRow}>
+                    {quickTappits.map((item) => (
+                        <button key={item.word} type="button" onClick={() => speakQuickWord(getWord(item))} style={{ ...styles.symbolButton, backgroundColor: "#fed7aa", border: "2px solid #c2410c", color: "#431407" }}>
+                            <span style={styles.emoji}>{item.emoji}</span>
+                            <span style={styles.word}>{getWord(item)}</span>
+                        </button>
+                    ))}
+                </div>
+            </section>
+        )}
 
-            {CATEGORIES.map((cat) => (
-                <section key={cat.label} style={styles.categorySection}>
-                    <h2 style={{ ...styles.sectionHeading, color: t.heading }}>{cat.label}</h2>
-                    <div style={styles.grid}>
-                        {cat.symbols.map((symbol) => (
-                            <button key={symbol.word} type="button" onClick={() => handleSymbolClick(getWord(symbol))} style={{ ...styles.symbolButton, backgroundColor: t.card, border: `2px solid ${t.border}`, color: t.text }}>
-                                <span style={styles.emoji}>{symbol.emoji}</span>
-                                <span style={styles.word}>{getWord(symbol)}</span>
-                            </button>
-                        ))}
-                    </div>
-                </section>
-            ))}
+        {CATEGORIES.map((cat) => (
+            <section key={cat.label} style={styles.categorySection}>
+                <h2 style={{ ...styles.sectionHeading, color: t.heading }}>{cat.label}</h2>
+                <div style={styles.grid}>
+                    {cat.symbols.map((symbol) => (
+                        <button key={symbol.word} type="button" onClick={() => handleSymbolClick(getWord(symbol))} style={{ ...styles.symbolButton, backgroundColor: t.card, border: `2px solid ${t.border}`, color: t.text }}>
+                            <span style={styles.emoji}>{symbol.emoji}</span>
+                            <span style={styles.word}>{getWord(symbol)}</span>
+                        </button>
+                    ))}
+                </div>
+            </section>
+        ))}
 
-            <div style={{ ...styles.tappitBar, backgroundColor: t.card, border: `2px solid ${t.border}`, color: t.text }}>
-                {phrase.length > 0 ? phrase.join(" ") : lang === "es" ? "Toca un símbolo para comenzar..." : "Tap a symbol to start..."}
-            </div>
-
-            <div style={{ ...styles.stickyBar, backgroundColor: t.bg, borderTop: `2px solid ${t.border}` }}>
-                <button type="button" onClick={speakPhrase} disabled={phrase.length === 0} style={{ ...styles.actionButton, backgroundColor: "#fbbf24", border: "2px solid #d97706", color: "#422006", ...(phrase.length === 0 ? styles.disabled : {}) }}>
-                    <span style={styles.actionEmoji}>🔊</span>
-                    <span style={styles.actionLabel}>{lang === "es" ? "Hablar" : "Speak"}</span>
-                </button>
-                <button type="button" onClick={clearPhrase} style={{ ...styles.actionButton, backgroundColor: "#e5e7eb", border: "2px solid #6b7280", color: "#111111" }}>
-                    <span style={styles.actionEmoji}>🗑️</span>
-                    <span style={styles.actionLabel}>{lang === "es" ? "Borrar" : "Clear"}</span>
-                </button>
-                {settings.showDraw && (
-                    <button type="button" onClick={() => setShowDrawing(true)} style={{ ...styles.actionButton, backgroundColor: "#ede9fe", border: "2px solid #7c3aed", color: "#3b0764" }}>
-                        <span style={styles.actionEmoji}>✏️</span>
-                        <span style={styles.actionLabel}>{lang === "es" ? "Dibujar" : "Draw"}</span>
-                    </button>
-                )}
-                {settings.showCalmCorner && (
-                    <button type="button" onClick={() => setShowCalm(true)} style={{ ...styles.actionButton, backgroundColor: "#d1fae5", border: "2px solid #059669", color: "#064e3b" }}>
-                        <span style={styles.actionEmoji}>🌿</span>
-                        <span style={styles.actionLabel}>{lang === "es" ? "Calma" : "Calm"}</span>
-                    </button>
-                )}
-                {settings.showRhymes && (
-                    <button type="button" onClick={() => setShowRhymes(true)} style={{ ...styles.actionButton, backgroundColor: "#fce7f3", border: "2px solid #db2777", color: "#831843" }}>
-                        <span style={styles.actionEmoji}>🎵</span>
-                        <span style={styles.actionLabel}>{lang === "es" ? "Rimas" : "Rhymes"}</span>
-                    </button>
-                )}
-            </div>
+        <div style={{ ...styles.tappitBar, backgroundColor: t.card, border: `2px solid ${t.border}`, color: t.text }}>
+            {phrase.length > 0 ? phrase.join(" ") : lang === "es" ? "Toca un símbolo para comenzar..." : "Tap a symbol to start..."}
         </div>
-    );
+
+        <div style={{ ...styles.stickyBar, backgroundColor: t.bg, borderTop: `2px solid ${t.border}` }}>
+            <button type="button" onClick={speakPhrase} disabled={phrase.length === 0} style={{ ...styles.actionButton, backgroundColor: "#fbbf24", border: "2px solid #d97706", color: "#422006", ...(phrase.length === 0 ? styles.disabled : {}) }}>
+                <span style={styles.actionEmoji}>🔊</span>
+                <span style={styles.actionLabel}>{lang === "es" ? "Hablar" : "Speak"}</span>
+            </button>
+            <button type="button" onClick={clearPhrase} style={{ ...styles.actionButton, backgroundColor: "#e5e7eb", border: "2px solid #6b7280", color: "#111111" }}>
+                <span style={styles.actionEmoji}>🗑️</span>
+                <span style={styles.actionLabel}>{lang === "es" ? "Borrar" : "Clear"}</span>
+            </button>
+            {settings.showDraw && (
+                <button type="button" onClick={() => setShowDrawing(true)} style={{ ...styles.actionButton, backgroundColor: "#ede9fe", border: "2px solid #7c3aed", color: "#3b0764" }}>
+                    <span style={styles.actionEmoji}>✏️</span>
+                    <span style={styles.actionLabel}>{lang === "es" ? "Dibujar" : "Draw"}</span>
+                </button>
+            )}
+            {settings.showCalmCorner && (
+                <button type="button" onClick={() => setShowCalm(true)} style={{ ...styles.actionButton, backgroundColor: "#d1fae5", border: "2px solid #059669", color: "#064e3b" }}>
+                    <span style={styles.actionEmoji}>🌿</span>
+                    <span style={styles.actionLabel}>{lang === "es" ? "Calma" : "Calm"}</span>
+                </button>
+            )}
+            {settings.showRhymes && (
+                <button type="button" onClick={() => setShowRhymes(true)} style={{ ...styles.actionButton, backgroundColor: "#fce7f3", border: "2px solid #db2777", color: "#831843" }}>
+                    <span style={styles.actionEmoji}>🎵</span>
+                    <span style={styles.actionLabel}>{lang === "es" ? "Rimas" : "Rhymes"}</span>
+                </button>
+            )}
+            {settings.showAlphabet && (
+                <button type="button" onClick={() => setShowAlphabet(true)} style={{ ...styles.actionButton, backgroundColor: "#e0f9ff", border: "2px solid #0284c7", color: "#0c4a6e" }}>
+                    <span style={styles.actionEmoji}>🔤</span>
+                    <span style={styles.actionLabel}>{lang === "es" ? "Alfabeto" : "Alphabet"}</span>
+                </button>
+            )}
+        </div>
+    </div>
+);
 };
 
 const styles = {
