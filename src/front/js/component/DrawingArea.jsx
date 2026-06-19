@@ -98,7 +98,7 @@ export const DrawingArea = ({ onBack }) => {
             <canvas
                 ref={canvasRef}
                 width={window.innerWidth}
-                height={window.innerHeight - 140}
+                height={window.innerHeight - 204}
                 style={styles.canvas}
                 onMouseDown={startDraw}
                 onMouseMove={draw}
@@ -115,14 +115,14 @@ export const DrawingArea = ({ onBack }) => {
 const styles = {
     wrapper: {
         position: "fixed",
-        top: 0,
+        top: 64,
         left: 0,
         width: "100vw",
-        height: "100vh",
+        height: "calc(100vh - 64px)",
         backgroundColor: "#ffffff",
         display: "flex",
         flexDirection: "column",
-        zIndex: 1000
+        zIndex: 150
     },
     topBar: {
         display: "flex",

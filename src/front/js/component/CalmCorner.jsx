@@ -15,7 +15,6 @@ export const CalmCorner = ({ onBack }) => {
     const [bubbles, setBubbles] = useState([]);
     const audioCtx = useRef(null);
 
-    // Breathe cycle
     useEffect(() => {
         if (mode !== "Breathe") return;
         const interval = setInterval(() => {
@@ -24,7 +23,6 @@ export const CalmCorner = ({ onBack }) => {
         return () => clearInterval(interval);
     }, [mode]);
 
-    // Color cycle
     useEffect(() => {
         if (mode !== "Colors") return;
         const interval = setInterval(() => {
@@ -33,7 +31,6 @@ export const CalmCorner = ({ onBack }) => {
         return () => clearInterval(interval);
     }, [mode]);
 
-    // Bubbles
     useEffect(() => {
         if (mode !== "Bubbles") return;
         const interval = setInterval(() => {
@@ -75,7 +72,6 @@ export const CalmCorner = ({ onBack }) => {
 
     return (
         <div style={styles.wrapper}>
-            {/* Top bar */}
             <div style={styles.topBar}>
                 <button onClick={onBack} style={styles.backButton}>
                     ← Back
@@ -90,7 +86,6 @@ export const CalmCorner = ({ onBack }) => {
                 </div>
             </div>
 
-            {/* Mode selector */}
             <div style={styles.modeRow}>
                 {MODES.map((m) => (
                     <button
@@ -110,10 +105,8 @@ export const CalmCorner = ({ onBack }) => {
                 ))}
             </div>
 
-            {/* Visual area */}
             <div style={styles.visualArea}>
 
-                {/* Bubbles mode */}
                 {mode === "Bubbles" && (
                     <div style={styles.bubblesContainer}>
                         {bubbles.map((b) => (
@@ -141,7 +134,6 @@ export const CalmCorner = ({ onBack }) => {
                     </div>
                 )}
 
-                {/* Breathe mode */}
                 {mode === "Breathe" && (
                     <div style={styles.breatheContainer}>
                         <div style={{
@@ -156,7 +148,6 @@ export const CalmCorner = ({ onBack }) => {
                     </div>
                 )}
 
-                {/* Colors mode */}
                 {mode === "Colors" && (
                     <div style={{
                         ...styles.colorWash,
@@ -173,14 +164,14 @@ export const CalmCorner = ({ onBack }) => {
 const styles = {
     wrapper: {
         position: "fixed",
-        top: 0,
+        top: 64,
         left: 0,
         width: "100vw",
-        height: "100vh",
+        height: "calc(100vh - 64px)",
         backgroundColor: "#f0f9ff",
         display: "flex",
         flexDirection: "column",
-        zIndex: 1000
+        zIndex: 150
     },
     topBar: {
         display: "flex",
