@@ -1,5 +1,4 @@
-import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
-import { SectionShell } from "./SectionShell";
+import React, { useRef, useState } from "react";
 
 const COLORS = [
     { label: "Red", value: "#ef4444" },
@@ -12,31 +11,23 @@ const COLORS = [
     { label: "White", value: "#ffffff" },
 ];
 
-export const DrawingArea = ({ onBack, lang = "en" }) => {
+export const DrawingArea = ({ onBack }) => {
     const canvasRef = useRef(null);
-    const canvasWrapRef = useRef(null);
     const isDrawing = useRef(false);
     const [selectedColor, setSelectedColor] = useState("#111111");
-    const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
-
-    useLayoutEffect(() => {
-        const measure = () => {
-            if (canvasWrapRef.current) {
-                const rect = canvasWrapRef.current.getBoundingClientRect();
-                setCanvasSize({ width: Math.floor(rect.width), height: Math.floor(rect.height) });
-            }
-        };
-        measure();
-        window.addEventListener("resize", measure);
-        return () => window.removeEventListener("resize", measure);
-    }, []);
 
     const getPos = (e, canvas) => {
         const rect = canvas.getBoundingClientRect();
         if (e.touches) {
-            return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+            return {
+                x: e.touches[0].clientX - rect.left,
+                y: e.touches[0].clientY - rect.top
+            };
         }
-        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        };
     };
 
     const startDraw = (e) => {
@@ -61,7 +52,9 @@ export const DrawingArea = ({ onBack, lang = "en" }) => {
         ctx.stroke();
     };
 
-    const stopDraw = () => { isDrawing.current = false; };
+    const stopDraw = () => {
+        isDrawing.current = false;
+    };
 
     const clearCanvas = () => {
         const canvas = canvasRef.current;
@@ -72,15 +65,16 @@ export const DrawingArea = ({ onBack, lang = "en" }) => {
     };
 
     return (
-        <SectionShell
-            onBack={onBack}
-            lang={lang}
-            variant="fill"
-            background="#ffffff"
-            headerActions={
-                <button onClick={clearCanvas} style={styles.clearButton}>Clear</button>
-            }
-        >
+        <div style={styles.wrapper}>
+            <div style={styles.topBar}>
+                <button onClick={onBack} style={styles.backButton}>
+                    ← Back
+                </button>
+                <button onClick={clearCanvas} style={styles.clearButton}>
+                    Clear
+                </button>
+            </div>
+
             <div style={styles.colorRow}>
                 {COLORS.map((color) => (
                     <button
@@ -89,38 +83,97 @@ export const DrawingArea = ({ onBack, lang = "en" }) => {
                         style={{
                             ...styles.colorButton,
                             backgroundColor: color.value,
-                            border: selectedColor === color.value ? "3px solid #111111" : "3px solid transparent",
-                            outline: selectedColor === color.value ? "2px solid #fbbf24" : "none"
+                            border: selectedColor === color.value
+                                ? "3px solid #111111"
+                                : "3px solid transparent",
+                            outline: selectedColor === color.value
+                                ? "2px solid #fbbf24"
+                                : "none"
                         }}
                         aria-label={color.label}
                     />
                 ))}
             </div>
 
-            <div ref={canvasWrapRef} style={styles.canvasWrap}>
-                {canvasSize.width > 0 && canvasSize.height > 0 && (
-                    <canvas
-                        ref={canvasRef}
-                        width={canvasSize.width}
-                        height={canvasSize.height}
-                        style={styles.canvas}
-                        onMouseDown={startDraw}
-                        onMouseMove={draw}
-                        onMouseUp={stopDraw}
-                        onMouseLeave={stopDraw}
-                        onTouchStart={startDraw}
-                        onTouchMove={draw}
-                        onTouchEnd={stopDraw}
-                    />
-                )}
-            </div>
-        </SectionShell>
+            <canvas
+                ref={canvasRef}
+                width={window.innerWidth}
+                height={window.innerHeight - 140}
+                style={styles.canvas}
+                onMouseDown={startDraw}
+                onMouseMove={draw}
+                onMouseUp={stopDraw}
+                onMouseLeave={stopDraw}
+                onTouchStart={startDraw}
+                onTouchMove={draw}
+                onTouchEnd={stopDraw}
+            />
+        </div>
     );
 };
 
 const styles = {
-    clearButton: { minHeight: "44px", minWidth: "80px", padding: "0.5rem 1rem", border: "2px solid #1f2937", borderRadius: "8px", backgroundColor: "#e5e7eb", color: "#111111", fontWeight: "700", cursor: "pointer", fontSize: "1rem" },
-    colorRow: { display: "flex", gap: "0.75rem", padding: "0.75rem 1rem", backgroundColor: "#f9fafb", borderBottom: "2px solid #e5e7eb", flexWrap: "wrap", flexShrink: 0 },
-    canvasWrap: { flex: 1, position: "relative", minHeight: "300px" },
-    canvas: { display: "block", backgroundColor: "#ffffff", touchAction: "none" }
+    wrapper: {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "#ffffff",
+        display: "flex",
+        flexDirection: "column",
+        zIndex: 1000
+    },
+    topBar: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "0.75rem 1rem",
+        backgroundColor: "#f9fafb",
+        borderBottom: "2px solid #e5e7eb"
+    },
+    backButton: {
+        minHeight: "44px",
+        minWidth: "80px",
+        padding: "0.5rem 1rem",
+        border: "2px solid #1f2937",
+        borderRadius: "8px",
+        backgroundColor: "#e5e7eb",
+        color: "#111111",
+        fontWeight: "700",
+        cursor: "pointer",
+        fontSize: "1rem"
+    },
+    clearButton: {
+        minHeight: "44px",
+        minWidth: "80px",
+        padding: "0.5rem 1rem",
+        border: "2px solid #1f2937",
+        borderRadius: "8px",
+        backgroundColor: "#e5e7eb",
+        color: "#111111",
+        fontWeight: "700",
+        cursor: "pointer",
+        fontSize: "1rem"
+    },
+    colorRow: {
+        display: "flex",
+        gap: "0.75rem",
+        padding: "0.75rem 1rem",
+        backgroundColor: "#f9fafb",
+        borderBottom: "2px solid #e5e7eb",
+        flexWrap: "wrap"
+    },
+    colorButton: {
+        width: "44px",
+        height: "44px",
+        borderRadius: "50%",
+        cursor: "pointer"
+    },
+    canvas: {
+        flex: 1,
+        display: "block",
+        backgroundColor: "#ffffff",
+        touchAction: "none"
+    }
 };
