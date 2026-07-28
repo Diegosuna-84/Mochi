@@ -17,6 +17,7 @@ const THEMES = {
 const CATEGORIES = [
     {
         label: "🗣️ Core Words",
+        labelEs: "🗣️ Palabras Clave",
         symbols: [
             { word: "I", es: "Yo", emoji: "👁️" },
             { word: "Want", es: "Quiero", emoji: "🙋" },
@@ -31,10 +32,23 @@ const CATEGORIES = [
             { word: "Help", es: "Ayuda", emoji: "🆘" },
             { word: "Hot", es: "Caliente", emoji: "🔥" },
             { word: "Cold", es: "Frío", emoji: "🧊" },
+            { word: "Like", es: "Me gusta", emoji: "👍" },
+            { word: "Look", es: "Mira", emoji: "👀" },
+            { word: "Wait", es: "Espera", emoji: "⏳" },
+            { word: "You", es: "Tú", emoji: "🫵" },
+            { word: "My", es: "Mi", emoji: "🫶" },
+            { word: "Up", es: "Arriba", emoji: "⬆️" },
+            { word: "Down", es: "Abajo", emoji: "⬇️" },
+            { word: "Turn", es: "Turno", emoji: "🔄" },
+            { word: "Good", es: "Bueno", emoji: "⭐" },
+            { word: "Bad", es: "Malo", emoji: "👎" },
+            { word: "Here", es: "Aquí", emoji: "📍" },
+            { word: "That", es: "Eso", emoji: "👉" },
         ],
     },
     {
         label: "🍎 Food & Drink",
+        labelEs: "🍎 Comida y Bebida",
         symbols: [
             { word: "Apple", es: "Manzana", emoji: "🍎" },
             { word: "Banana", es: "Plátano", emoji: "🍌" },
@@ -46,10 +60,33 @@ const CATEGORIES = [
             { word: "Drink", es: "Bebida", emoji: "🥤" },
             { word: "Milk", es: "Leche", emoji: "🥛" },
             { word: "Food", es: "Comida", emoji: "🍽️" },
+            { word: "Grapes", es: "Uvas", emoji: "🍇" },
+            { word: "Strawberry", es: "Fresa", emoji: "🍓" },
+            { word: "Orange", es: "Naranja", emoji: "🍊" },
+            { word: "Watermelon", es: "Sandía", emoji: "🍉" },
+            { word: "Mango", es: "Mango", emoji: "🥭" },
+            { word: "Peach", es: "Durazno", emoji: "🍑" },
+            { word: "Pear", es: "Pera", emoji: "🍐" },
+            { word: "Carrot", es: "Zanahoria", emoji: "🥕" },
+            { word: "Broccoli", es: "Brócoli", emoji: "🥦" },
+            { word: "Corn", es: "Maíz", emoji: "🌽" },
+            { word: "Tomato", es: "Tomate", emoji: "🍅" },
+            { word: "Potato", es: "Papa", emoji: "🥔" },
+            { word: "Salad", es: "Ensalada", emoji: "🥗" },
+            { word: "Rice", es: "Arroz", emoji: "🍚" },
+            { word: "Soup", es: "Sopa", emoji: "🍲" },
+            { word: "Egg", es: "Huevo", emoji: "🥚" },
+            { word: "Cheese", es: "Queso", emoji: "🧀" },
+            { word: "Juice", es: "Jugo", emoji: "🧃" },
+            { word: "Water", es: "Agua", emoji: "💧" },
+            { word: "Cake", es: "Pastel", emoji: "🎂" },
+            { word: "Cookie", es: "Galleta", emoji: "🍪" },
+            { word: "Chips", es: "Papitas", emoji: "🥨" },
         ],
     },
     {
         label: "😊 Feelings",
+        labelEs: "😊 Sentimientos",
         symbols: [
             { word: "Happy", es: "Feliz", emoji: "😊" },
             { word: "Sad", es: "Triste", emoji: "😢" },
@@ -63,6 +100,7 @@ const CATEGORIES = [
     },
     {
         label: "🏠 Places & Things",
+        labelEs: "🏠 Lugares y Cosas",
         symbols: [
             { word: "Home", es: "Casa", emoji: "🏠" },
             { word: "School", es: "Escuela", emoji: "🏫" },
@@ -78,6 +116,7 @@ const CATEGORIES = [
     },
     {
         label: "🐶 Animals",
+        labelEs: "🐶 Animales",
         symbols: [
             { word: "Dog", es: "Perro", emoji: "🐶" },
             { word: "Cat", es: "Gato", emoji: "🐱" },
@@ -93,6 +132,7 @@ const CATEGORIES = [
     },
     {
         label: "🎨 Objects",
+        labelEs: "🎨 Objetos",
         symbols: [
             { word: "Ball", es: "Pelota", emoji: "⚽" },
             { word: "Book", es: "Libro", emoji: "📚" },
@@ -108,6 +148,7 @@ const CATEGORIES = [
     },
     {
         label: "👨‍👩‍👧 People",
+        labelEs: "👨‍👩‍👧 Personas",
         symbols: [
             { word: "Mom", es: "Mamá", emoji: "👩" },
             { word: "Dad", es: "Papá", emoji: "👨" },
@@ -124,6 +165,7 @@ const CATEGORIES = [
     },
     {
         label: "🏃 Actions",
+        labelEs: "🏃 Acciones",
         symbols: [
             { word: "Go", es: "Ir", emoji: "🚶" },
             { word: "Come", es: "Ven", emoji: "👋" },
@@ -142,6 +184,7 @@ const CATEGORIES = [
     },
     {
         label: "🎨 Colors",
+        labelEs: "🎨 Colores",
         symbols: [
             { word: "Red", es: "Rojo", emoji: "🔴" },
             { word: "Blue", es: "Azul", emoji: "🔵" },
@@ -157,6 +200,7 @@ const CATEGORIES = [
     },
     {
         label: "🫀 Body",
+        labelEs: "🫀 Cuerpo",
         symbols: [
             { word: "Head", es: "Cabeza", emoji: "🗣️" },
             { word: "Hand", es: "Mano", emoji: "✋" },
@@ -172,6 +216,7 @@ const CATEGORIES = [
     },
     {
         label: "🔢 Numbers",
+        labelEs: "🔢 Números",
         symbols: [
             { word: "1", es: "1", emoji: "1️⃣" },
             { word: "2", es: "2", emoji: "2️⃣" },
@@ -187,6 +232,7 @@ const CATEGORIES = [
     },
     {
         label: "⭐ Vowels",
+        labelEs: "⭐ Vocales",
         symbols: [
             { word: "Ay", es: "A", emoji: "A" },
             { word: "Ee", es: "E", emoji: "E" },
@@ -239,6 +285,7 @@ export const TappitBoard = ({ showSettings, setShowSettings, activeProfile }) =>
     const t = THEMES[settings.theme] || THEMES["blue"];
     const lang = profile.language || "en";
     const getWord = (symbol) => lang === "es" ? (symbol.es || symbol.word) : symbol.word;
+    const getCategoryLabel = (cat) => lang === "es" ? (cat.labelEs || cat.label) : cat.label;
 
     useEffect(() => {
         localStorage.setItem("mochiProfile", JSON.stringify(profile));
@@ -351,7 +398,7 @@ return (
 
         {CATEGORIES.map((cat) => (
             <section key={cat.label} style={styles.categorySection}>
-                <h2 style={{ ...styles.sectionHeading, color: t.heading }}>{cat.label}</h2>
+                <h2 style={{ ...styles.sectionHeading, color: t.heading }}>{getCategoryLabel(cat)}</h2>
                 <div style={styles.grid}>
                     {cat.symbols.map((symbol) => (
                         <button key={symbol.word} type="button" onClick={() => handleSymbolClick(getWord(symbol))} style={{ ...styles.symbolButton, backgroundColor: t.card, border: `2px solid ${t.border}`, color: t.text }}>

@@ -81,3 +81,6 @@ database.database
 database.db
 diagram.png
 __pycache__/
+
+# local working notes, not part of the project
+CLEANUP_LOG.md
