@@ -42,57 +42,64 @@ export const RhymesCorner = ({ onBack }) => {
     };
 
     return (
-        <div style={{ ...styles.wrapper, backgroundColor: t.bg, background: undefined }}>
-            {/* Top Bar */}
-            <div style={styles.topBar}>
-                <button onClick={() => { handleStop(); onBack(); }} style={styles.backButton}>
-                    ← Back
-                </button>
-                <h1 style={{ ...styles.title, color: t.heading }}>🎵 Rhymes Corner</h1>
-                {playing && (
-                    <button onClick={handleStop} style={styles.stopButton}>
-                        ⏹ Stop
+        <div style={{ ...styles.fullBleed, backgroundColor: t.bg }}>
+            <div style={styles.wrapper}>
+                {/* Top Bar */}
+                <div style={styles.topBar}>
+                    <button onClick={() => { handleStop(); onBack(); }} style={styles.backButton}>
+                        ← Back
                     </button>
-                )}
-            </div>
-
-            {/* Now Playing */}
-            {playing && (
-                <div style={{ ...styles.nowPlaying, backgroundColor: t.heading }}>
-                    <span style={styles.nowPlayingEmoji}>{playing.emoji}</span>
-                    <span style={styles.nowPlayingText}>Now Playing: {playing.title}</span>
+                    <h1 style={{ ...styles.title, color: t.heading }}>🎵 Rhymes Corner</h1>
+                    {playing && (
+                        <button onClick={handleStop} style={styles.stopButton}>
+                            ⏹ Stop
+                        </button>
+                    )}
                 </div>
-            )}
 
-            {/* Rhyme Grid */}
-            <div style={styles.grid}>
-                {RHYMES.map((rhyme) => (
-                    <button
-                        key={rhyme.title}
-                        onClick={() => handlePlay(rhyme)}
-                        style={{
-                            ...styles.rhymeButton,
-                            backgroundColor: playing?.title === rhyme.title ? t.heading : t.card,
-                            color: playing?.title === rhyme.title ? "#ffffff" : t.text,
-                            border: playing?.title === rhyme.title ? `3px solid ${t.heading}` : `2px solid ${t.border}`,
-                            transform: playing?.title === rhyme.title ? "scale(1.05)" : "scale(1)",
-                        }}
-                    >
-                        <span style={styles.rhymeEmoji}>{rhyme.emoji}</span>
-                        <span style={styles.rhymeTitle}>{rhyme.title}</span>
-                        <span style={styles.playIcon}>
-                            {playing?.title === rhyme.title ? "⏸" : "▶️"}
-                        </span>
-                    </button>
-                ))}
+                {/* Now Playing */}
+                {playing && (
+                    <div style={{ ...styles.nowPlaying, backgroundColor: t.heading }}>
+                        <span style={styles.nowPlayingEmoji}>{playing.emoji}</span>
+                        <span style={styles.nowPlayingText}>Now Playing: {playing.title}</span>
+                    </div>
+                )}
+
+                {/* Rhyme Grid */}
+                <div style={styles.grid}>
+                    {RHYMES.map((rhyme) => (
+                        <button
+                            key={rhyme.title}
+                            onClick={() => handlePlay(rhyme)}
+                            style={{
+                                ...styles.rhymeButton,
+                                backgroundColor: playing?.title === rhyme.title ? t.heading : t.card,
+                                color: playing?.title === rhyme.title ? "#ffffff" : t.text,
+                                border: playing?.title === rhyme.title ? `3px solid ${t.heading}` : `2px solid ${t.border}`,
+                                transform: playing?.title === rhyme.title ? "scale(1.05)" : "scale(1)",
+                            }}
+                        >
+                            <span style={styles.rhymeEmoji}>{rhyme.emoji}</span>
+                            <span style={styles.rhymeTitle}>{rhyme.title}</span>
+                            <span style={styles.playIcon}>
+                                {playing?.title === rhyme.title ? "⏸" : "▶️"}
+                            </span>
+                        </button>
+                    ))}
+                </div>
             </div>
         </div>
     );
 };
 
 const styles = {
-    wrapper: {
+    fullBleed: {
         minHeight: "100vh",
+        width: "100%",
+    },
+    wrapper: {
+        maxWidth: "800px",
+        margin: "0 auto",
         padding: "1rem",
     },
     topBar: {
