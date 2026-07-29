@@ -3,10 +3,14 @@ import { getActiveTheme } from "./theme";
 
 export const AlphabetBoard = ({ onBack, activeProfile }) => {
     const [word, setWord] = useState("");
+    const [isUppercase, setIsUppercase] = useState(true);
     const t = getActiveTheme();
+    const lang = activeProfile?.language || "en";
 
     const speak = (text) => {
+        if (!text) return;
         const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang === "es" ? "es-ES" : "en-US";
         if (activeProfile?.voicePreference) {
             const voices = window.speechSynthesis.getVoices();
             const preferred = voices.find(v => v.name === activeProfile.voicePreference);
@@ -15,33 +19,45 @@ export const AlphabetBoard = ({ onBack, activeProfile }) => {
         window.speechSynthesis.speak(utterance);
     };
 
+    const handleLetterPress = (letter) => {
+        const actualLetter = isUppercase ? letter : letter.toLowerCase();
+        setWord((prev) => prev + actualLetter);
+        speak(actualLetter);
+    };
+
     return (
-        <div style={{ ...styles.wrapper, backgroundColor: t.bg }}>
-            <div style={styles.topBar}>
-                <button onClick={onBack} style={styles.backButton}>← Back</button>
-                <h1 style={{ ...styles.title, color: t.heading }}>🔤 Alphabet</h1>
-            </div>
-            <div style={{ ...styles.wordDisplay, backgroundColor: t.card }}>
-                <span style={{ ...styles.wordText, color: t.heading }}>{word || "..."}</span>
-            </div>
-            <div style={styles.controls}>
-                <button onClick={() => setWord("")} style={styles.controlButton}>🗑️ Clear</button>
-                <button onClick={() => setWord(word.slice(0, -1))} style={styles.controlButton}>⌫ Backspace</button>
-                <button onClick={() => speak(word)} disabled={word.length === 0} style={{ ...styles.controlButton, ...styles.speakButton, ...(word.length === 0 ? styles.disabled : {}) }}>🔊 Speak</button>
-            </div>
-            <div style={styles.grid}>
-                {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter) => (
-                    <button key={letter} onClick={() => { setWord(word + letter); speak(letter); }} style={{ ...styles.letterButton, backgroundColor: t.card, borderColor: t.border, color: t.heading }}>
-                        {letter}
+        <div style={{ ...styles.fullBleed, backgroundColor: t.bg }}>
+            <div style={styles.wrapper}>
+                <div style={styles.topBar}>
+                    <button onClick={onBack} style={styles.backButton}>← Back</button>
+                    <h1 style={{ ...styles.title, color: t.heading }}>🔤 Alphabet</h1>
+                </div>
+                <div style={{ ...styles.wordDisplay, backgroundColor: t.card }}>
+                    <span style={{ ...styles.wordText, color: t.heading }}>{word || "..."}</span>
+                </div>
+                <div style={styles.controls}>
+                    <button onClick={() => setWord("")} style={styles.controlButton}>🗑️ Clear</button>
+                    <button onClick={() => setWord(word.slice(0, -1))} style={styles.controlButton}>⌫ Backspace</button>
+                    <button onClick={() => speak(word)} disabled={word.length === 0} style={{ ...styles.controlButton, ...styles.speakButton, ...(word.length === 0 ? styles.disabled : {}) }}>🔊 Speak</button>
+                    <button onClick={() => setIsUppercase((prev) => !prev)} style={{ ...styles.controlButton, backgroundColor: t.card, borderColor: t.border, color: t.text }}>
+                        {isUppercase ? "Aa" : "AA"}
                     </button>
-                ))}
+                </div>
+                <div style={styles.grid}>
+                    {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter) => (
+                        <button key={letter} onClick={() => handleLetterPress(letter)} style={{ ...styles.letterButton, backgroundColor: t.card, borderColor: t.border, color: t.heading }}>
+                            {isUppercase ? letter : letter.toLowerCase()}
+                        </button>
+                    ))}
+                </div>
             </div>
         </div>
     );
 };
 
 const styles = {
-    wrapper: { maxWidth: "680px", margin: "0 auto", padding: "1rem", minHeight: "100vh" },
+    fullBleed: { minHeight: "100vh", width: "100%" },
+    wrapper: { maxWidth: "680px", margin: "0 auto", padding: "1rem" },
     topBar: { display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" },
     backButton: { minHeight: "44px", minWidth: "80px", padding: "0.5rem 1rem", border: "2px solid #1f2937", borderRadius: "8px", backgroundColor: "#e5e7eb", color: "#111111", fontWeight: "700", cursor: "pointer", fontSize: "1rem" },
     title: { fontSize: "1.4rem", fontWeight: "800", margin: 0 },
