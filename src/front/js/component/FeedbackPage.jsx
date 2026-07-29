@@ -1,11 +1,13 @@
 import React from "react";
 import { SectionShell } from "./SectionShell";
+import { getActiveTheme } from "./theme";
 
 const FEEDBACK_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdjJCN0q_dzvchhAsbbNdBQ2kSGEsc_VxtPn2tDbfYHDahx_Q/viewform";
 
 export const FeedbackPage = ({ onBack }) => {
     const profile = JSON.parse(localStorage.getItem("mochiProfile"));
     const lang = profile?.language || "en";
+    const t = getActiveTheme();
 
     const copy = lang === "es"
         ? {
@@ -37,17 +39,17 @@ export const FeedbackPage = ({ onBack }) => {
 
     return (
         <SectionShell title={copy.title} onBack={onBack} lang={lang}>
-            <section style={styles.card}>
+            <section style={{ ...styles.card, backgroundColor: t.card }}>
                 <p style={styles.emoji}>🍡</p>
-                <h2 style={styles.heading}>{copy.heading}</h2>
-                <p style={styles.text}>{copy.body1}</p>
-                <p style={styles.text}>{copy.body2}</p>
+                <h2 style={{ ...styles.heading, color: t.heading }}>{copy.heading}</h2>
+                <p style={{ ...styles.text, color: t.text }}>{copy.body1}</p>
+                <p style={{ ...styles.text, color: t.text }}>{copy.body2}</p>
 
                 <div style={styles.tipList}>
                     {copy.tips.map((tip) => (
                         <div key={tip.text} style={styles.tip}>
                             <span style={styles.tipEmoji}>{tip.emoji}</span>
-                            <p style={styles.tipText}>{tip.text}</p>
+                            <p style={{ ...styles.tipText, color: t.text }}>{tip.text}</p>
                         </div>
                     ))}
                 </div>
@@ -56,7 +58,7 @@ export const FeedbackPage = ({ onBack }) => {
                     href={FEEDBACK_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={styles.feedbackButton}
+                    style={{ ...styles.feedbackButton, backgroundColor: t.heading }}
                 >
                     {copy.button}
                 </a>
@@ -69,7 +71,6 @@ export const FeedbackPage = ({ onBack }) => {
 
 const styles = {
     card: {
-        backgroundColor: "#ffffff",
         borderRadius: "24px",
         padding: "1.5rem",
         textAlign: "center",
@@ -79,12 +80,10 @@ const styles = {
     heading: {
         fontSize: "1.25rem",
         fontWeight: "800",
-        color: "#002366",
         margin: "0 0 1rem 0",
     },
     text: {
         fontSize: "0.95rem",
-        color: "#374151",
         lineHeight: "1.6",
         margin: "0 0 0.75rem 0",
     },
@@ -101,13 +100,12 @@ const styles = {
         gap: "0.6rem",
     },
     tipEmoji: { fontSize: "1.25rem" },
-    tipText: { fontSize: "0.9rem", color: "#374151", margin: 0 },
+    tipText: { fontSize: "0.9rem", margin: 0 },
     feedbackButton: {
         display: "inline-block",
         width: "100%",
         boxSizing: "border-box",
         padding: "1rem",
-        backgroundColor: "#002366",
         color: "#ffffff",
         borderRadius: "16px",
         fontWeight: "700",

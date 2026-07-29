@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { getActiveTheme } from "./theme";
 
 const RHYMES = [
     { title: "Wheels on the Bus", emoji: "🚌", file: "/audio/wheels-on-the-bus.mp3" },
@@ -14,6 +15,7 @@ const RHYMES = [
 export const RhymesCorner = ({ onBack }) => {
     const [playing, setPlaying] = useState(null);
     const audioRef = useRef(null);
+    const t = getActiveTheme();
 
     const handlePlay = (rhyme) => {
         if (audioRef.current) {
@@ -40,13 +42,13 @@ export const RhymesCorner = ({ onBack }) => {
     };
 
     return (
-        <div style={styles.wrapper}>
+        <div style={{ ...styles.wrapper, backgroundColor: t.bg, background: undefined }}>
             {/* Top Bar */}
             <div style={styles.topBar}>
                 <button onClick={() => { handleStop(); onBack(); }} style={styles.backButton}>
                     ← Back
                 </button>
-                <h1 style={styles.title}>🎵 Rhymes Corner</h1>
+                <h1 style={{ ...styles.title, color: t.heading }}>🎵 Rhymes Corner</h1>
                 {playing && (
                     <button onClick={handleStop} style={styles.stopButton}>
                         ⏹ Stop
@@ -56,7 +58,7 @@ export const RhymesCorner = ({ onBack }) => {
 
             {/* Now Playing */}
             {playing && (
-                <div style={styles.nowPlaying}>
+                <div style={{ ...styles.nowPlaying, backgroundColor: t.heading }}>
                     <span style={styles.nowPlayingEmoji}>{playing.emoji}</span>
                     <span style={styles.nowPlayingText}>Now Playing: {playing.title}</span>
                 </div>
@@ -70,9 +72,9 @@ export const RhymesCorner = ({ onBack }) => {
                         onClick={() => handlePlay(rhyme)}
                         style={{
                             ...styles.rhymeButton,
-                            backgroundColor: playing?.title === rhyme.title ? "#002366" : "#ffffff",
-                            color: playing?.title === rhyme.title ? "#ffffff" : "#111111",
-                            border: playing?.title === rhyme.title ? "3px solid #002366" : "2px solid #7dd3fc",
+                            backgroundColor: playing?.title === rhyme.title ? t.heading : t.card,
+                            color: playing?.title === rhyme.title ? "#ffffff" : t.text,
+                            border: playing?.title === rhyme.title ? `3px solid ${t.heading}` : `2px solid ${t.border}`,
                             transform: playing?.title === rhyme.title ? "scale(1.05)" : "scale(1)",
                         }}
                     >
@@ -91,7 +93,6 @@ export const RhymesCorner = ({ onBack }) => {
 const styles = {
     wrapper: {
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #e0f2fe 0%, #fce7f3 100%)",
         padding: "1rem",
     },
     topBar: {
@@ -117,7 +118,6 @@ const styles = {
     title: {
         fontSize: "1.5rem",
         fontWeight: "800",
-        color: "#002366",
         margin: 0,
     },
     stopButton: {
@@ -135,7 +135,6 @@ const styles = {
         display: "flex",
         alignItems: "center",
         gap: "0.75rem",
-        backgroundColor: "#002366",
         color: "#ffffff",
         padding: "0.75rem 1rem",
         borderRadius: "12px",

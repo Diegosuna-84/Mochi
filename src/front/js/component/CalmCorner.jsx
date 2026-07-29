@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { getActiveTheme } from "./theme";
 
 const MODES = [
     { label: "Bubbles", emoji: "🫧" },
@@ -14,6 +15,7 @@ export const CalmCorner = ({ onBack }) => {
     const [colorIndex, setColorIndex] = useState(0);
     const [bubbles, setBubbles] = useState([]);
     const audioCtx = useRef(null);
+    const t = getActiveTheme();
 
     useEffect(() => {
         if (mode !== "Breathe") return;
@@ -71,8 +73,8 @@ export const CalmCorner = ({ onBack }) => {
     };
 
     return (
-        <div style={styles.wrapper}>
-            <div style={styles.topBar}>
+        <div style={{ ...styles.wrapper, backgroundColor: t.bg }}>
+            <div style={{ ...styles.topBar, backgroundColor: t.card, borderBottomColor: t.border }}>
                 <button onClick={onBack} style={styles.backButton}>
                     ← Back
                 </button>
@@ -86,17 +88,18 @@ export const CalmCorner = ({ onBack }) => {
                 </div>
             </div>
 
-            <div style={styles.modeRow}>
+            <div style={{ ...styles.modeRow, backgroundColor: t.card, borderBottomColor: t.border }}>
                 {MODES.map((m) => (
                     <button
                         key={m.label}
                         onClick={() => setMode(m.label)}
                         style={{
                             ...styles.modeButton,
+                            color: t.text,
                             border: mode === m.label
                                 ? "3px solid #111111"
                                 : "3px solid transparent",
-                            backgroundColor: mode === m.label ? "#e0f2fe" : "#f9fafb"
+                            backgroundColor: mode === m.label ? t.bg : t.card
                         }}
                     >
                         <span style={{ fontSize: "1.8rem" }}>{m.emoji}</span>
@@ -168,7 +171,6 @@ const styles = {
         left: 0,
         width: "100vw",
         height: "calc(100vh - 64px)",
-        backgroundColor: "#f0f9ff",
         display: "flex",
         flexDirection: "column",
         zIndex: 150
@@ -178,8 +180,7 @@ const styles = {
         justifyContent: "space-between",
         alignItems: "center",
         padding: "0.75rem 1rem",
-        backgroundColor: "#f9fafb",
-        borderBottom: "2px solid #e5e7eb"
+        borderBottom: "2px solid"
     },
     backButton: {
         minHeight: "44px",
@@ -212,8 +213,7 @@ const styles = {
         display: "flex",
         gap: "0.75rem",
         padding: "0.75rem 1rem",
-        backgroundColor: "#f9fafb",
-        borderBottom: "2px solid #e5e7eb",
+        borderBottom: "2px solid",
         justifyContent: "center"
     },
     modeButton: {

@@ -1,4 +1,5 @@
 import React from "react";
+import { getActiveTheme } from "./theme";
 
 export const SectionShell = ({
     title,
@@ -7,19 +8,19 @@ export const SectionShell = ({
     headerActions = null,
     variant = "scroll",
     maxWidth = 680,
-    background = "#f0f9ff",
     children,
 }) => {
+    const t = getActiveTheme();
     const backLabel = lang === "es" ? "← Volver" : "← Back";
 
     if (variant === "fill") {
         return (
-            <div style={{ ...styles.fillWrapper, backgroundColor: background }}>
-                <div style={styles.fillTopBar}>
+            <div style={{ ...styles.fillWrapper, backgroundColor: t.bg }}>
+                <div style={{ ...styles.fillTopBar, backgroundColor: t.card, borderBottomColor: t.border }}>
                     <button onClick={onBack} style={styles.backButton} aria-label={backLabel}>
                         {backLabel}
                     </button>
-                    {title && <h1 style={styles.fillTitle}>{title}</h1>}
+                    {title && <h1 style={{ ...styles.fillTitle, color: t.heading }}>{title}</h1>}
                     {headerActions && <div style={styles.headerActions}>{headerActions}</div>}
                 </div>
                 <div style={styles.fillContent}>{children}</div>
@@ -28,26 +29,31 @@ export const SectionShell = ({
     }
 
     return (
-        <div
-            style={{
-                ...styles.scrollWrapper,
-                backgroundColor: background,
-                ...(maxWidth ? { maxWidth: `${maxWidth}px`, margin: "0 auto" } : {}),
-            }}
-        >
-            <div style={styles.scrollTopBar}>
-                <button onClick={onBack} style={styles.backButton} aria-label={backLabel}>
-                    {backLabel}
-                </button>
-                {title && <h1 style={styles.scrollTitle}>{title}</h1>}
-                {headerActions && <div style={styles.headerActions}>{headerActions}</div>}
+        <div style={{ ...styles.fullBleed, backgroundColor: t.bg }}>
+            <div
+                style={{
+                    ...styles.scrollWrapper,
+                    ...(maxWidth ? { maxWidth: `${maxWidth}px`, margin: "0 auto" } : {}),
+                }}
+            >
+                <div style={styles.scrollTopBar}>
+                    <button onClick={onBack} style={styles.backButton} aria-label={backLabel}>
+                        {backLabel}
+                    </button>
+                    {title && <h1 style={{ ...styles.scrollTitle, color: t.heading }}>{title}</h1>}
+                    {headerActions && <div style={styles.headerActions}>{headerActions}</div>}
+                </div>
+                {children}
             </div>
-            {children}
         </div>
     );
 };
 
 const styles = {
+    fullBleed: {
+        width: "100%",
+        minHeight: "100vh",
+    },
     backButton: {
         minHeight: "44px",
         minWidth: "80px",
@@ -70,7 +76,6 @@ const styles = {
     scrollWrapper: {
         width: "100%",
         padding: "1rem",
-        minHeight: "100%",
         boxSizing: "border-box",
     },
     scrollTopBar: {
@@ -83,7 +88,6 @@ const styles = {
     scrollTitle: {
         fontSize: "1.4rem",
         fontWeight: "800",
-        color: "#002366",
         margin: 0,
         flex: 1,
     },
@@ -99,15 +103,13 @@ const styles = {
         alignItems: "center",
         gap: "0.75rem",
         padding: "0.75rem 1rem",
-        backgroundColor: "#f9fafb",
-        borderBottom: "2px solid #e5e7eb",
+        borderBottom: "2px solid",
         flexWrap: "wrap",
         flexShrink: 0,
     },
     fillTitle: {
         fontSize: "1.2rem",
         fontWeight: "800",
-        color: "#002366",
         margin: 0,
         flex: 1,
     },

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getActiveTheme } from "./theme";
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
@@ -15,6 +16,7 @@ export const ProfilePicker = ({ onSelectProfile, onSkip }) => {
     const [newName, setNewName] = useState("");
     const [newAgeGroup, setNewAgeGroup] = useState("child");
     const [bounce, setBounce] = useState(false);
+    const t = getActiveTheme();
 
     const saveProfiles = (updated) => {
         setProfiles(updated);
@@ -60,7 +62,7 @@ export const ProfilePicker = ({ onSelectProfile, onSkip }) => {
     };
 
     return (
-        <div style={styles.wrapper}>
+        <div style={{ ...styles.wrapper, backgroundColor: t.bg }}>
             <style>{`
                 @keyframes bounce {
                     0%, 100% { transform: translateY(0); }
@@ -79,9 +81,9 @@ export const ProfilePicker = ({ onSelectProfile, onSkip }) => {
                 }
             `}</style>
 
-            <div style={styles.card} className="mochi-card">
+            <div style={{ ...styles.card, backgroundColor: t.card }} className="mochi-card">
                 <div className="mochi-logo" style={styles.logoEmoji}>🍡</div>
-                <h1 style={styles.title}>Mochi</h1>
+                <h1 style={{ ...styles.title, color: t.heading }}>Mochi</h1>
                 <p style={styles.subtitle}>Who is using Mochi today?</p>
 
                 {/* Profile list */}
@@ -90,7 +92,7 @@ export const ProfilePicker = ({ onSelectProfile, onSkip }) => {
                         <div key={profile.id} style={styles.profileRow}>
                             <button
                                 onClick={() => handleSelect(profile)}
-                                style={styles.profileButton}
+                                style={{ ...styles.profileButton, backgroundColor: t.bg, borderColor: t.border }}
                             >
                                 <div style={{
                                     ...styles.avatar,
@@ -99,7 +101,7 @@ export const ProfilePicker = ({ onSelectProfile, onSkip }) => {
                                     {getEmoji(profile.ageGroup)}
                                 </div>
                                 <div style={styles.profileInfo}>
-                                    <span style={styles.profileName}>{profile.name}</span>
+                                    <span style={{ ...styles.profileName, color: t.heading }}>{profile.name}</span>
                                     <span style={styles.profileAge}>{profile.ageGroup}</span>
                                 </div>
                             </button>
@@ -135,7 +137,7 @@ export const ProfilePicker = ({ onSelectProfile, onSkip }) => {
                             <option value="adult">Adult</option>
                         </select>
                         <div style={styles.formButtons}>
-                            <button onClick={handleCreate} style={styles.createButton}>
+                            <button onClick={handleCreate} style={{ ...styles.createButton, backgroundColor: t.heading }}>
                                 ✅ Create
                             </button>
                             <button onClick={() => setShowForm(false)} style={styles.cancelButton}>
@@ -144,7 +146,7 @@ export const ProfilePicker = ({ onSelectProfile, onSkip }) => {
                         </div>
                     </div>
                 ) : (
-                    <button onClick={() => setShowForm(true)} style={styles.addButton}>
+                    <button onClick={() => setShowForm(true)} style={{ ...styles.addButton, borderColor: t.border, color: t.heading, backgroundColor: t.bg }}>
                         + Add Profile
                     </button>
                 )}
@@ -161,14 +163,12 @@ export const ProfilePicker = ({ onSelectProfile, onSkip }) => {
 const styles = {
     wrapper: {
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #e0f2fe 0%, #fce7f3 100%)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         padding: "1rem",
     },
     card: {
-        backgroundColor: "#ffffff",
         borderRadius: "32px",
         padding: "2.5rem 2rem",
         width: "100%",
@@ -183,7 +183,6 @@ const styles = {
     title: {
         fontSize: "2.8rem",
         fontWeight: "800",
-        color: "#002366",
         margin: "0 0 0.25rem 0",
         fontFamily: "Georgia, serif",
         letterSpacing: "2px",
@@ -212,8 +211,7 @@ const styles = {
         gap: "0.75rem",
         padding: "0.75rem 1rem",
         borderRadius: "16px",
-        border: "2px solid #e0f2fe",
-        backgroundColor: "#f0f9ff",
+        border: "2px solid",
         cursor: "pointer",
         textAlign: "left",
         transition: "all 0.2s",
@@ -236,7 +234,6 @@ const styles = {
     profileName: {
         fontSize: "1.1rem",
         fontWeight: "700",
-        color: "#002366",
     },
     profileAge: {
         fontSize: "0.8rem",
@@ -274,7 +271,6 @@ const styles = {
         padding: "0.6rem",
         borderRadius: "8px",
         border: "none",
-        backgroundColor: "#002366",
         color: "#ffffff",
         fontWeight: "700",
         cursor: "pointer",
@@ -294,9 +290,7 @@ const styles = {
         width: "100%",
         padding: "0.75rem",
         borderRadius: "12px",
-        border: "2px dashed #7dd3fc",
-        backgroundColor: "#f0f9ff",
-        color: "#0369a1",
+        border: "2px dashed",
         fontWeight: "700",
         cursor: "pointer",
         fontSize: "1rem",

@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { getActiveTheme } from "./theme";
 
 const COLORS = [
     { label: "Red", value: "#ef4444" },
@@ -15,6 +16,7 @@ export const DrawingArea = ({ onBack }) => {
     const canvasRef = useRef(null);
     const isDrawing = useRef(false);
     const [selectedColor, setSelectedColor] = useState("#111111");
+    const t = getActiveTheme();
 
     const getPos = (e, canvas) => {
         const rect = canvas.getBoundingClientRect();
@@ -66,7 +68,7 @@ export const DrawingArea = ({ onBack }) => {
 
     return (
         <div style={styles.wrapper}>
-            <div style={styles.topBar}>
+            <div style={{ ...styles.topBar, backgroundColor: t.card, borderBottomColor: t.border }}>
                 <button onClick={onBack} style={styles.backButton}>
                     ← Back
                 </button>
@@ -75,7 +77,7 @@ export const DrawingArea = ({ onBack }) => {
                 </button>
             </div>
 
-            <div style={styles.colorRow}>
+            <div style={{ ...styles.colorRow, backgroundColor: t.card, borderBottomColor: t.border }}>
                 {COLORS.map((color) => (
                     <button
                         key={color.value}
@@ -129,8 +131,7 @@ const styles = {
         justifyContent: "space-between",
         alignItems: "center",
         padding: "0.75rem 1rem",
-        backgroundColor: "#f9fafb",
-        borderBottom: "2px solid #e5e7eb"
+        borderBottom: "2px solid"
     },
     backButton: {
         minHeight: "44px",
@@ -160,8 +161,7 @@ const styles = {
         display: "flex",
         gap: "0.75rem",
         padding: "0.75rem 1rem",
-        backgroundColor: "#f9fafb",
-        borderBottom: "2px solid #e5e7eb",
+        borderBottom: "2px solid",
         flexWrap: "wrap"
     },
     colorButton: {
