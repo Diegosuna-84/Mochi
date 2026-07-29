@@ -1,7 +1,15 @@
 import React, { useState } from "react";
+import { getActiveTheme } from "./theme";
+
+const TIPS = [
+    { emoji: "👆", title: "Tap to Talk", body: "Tap any symbol to add it to your phrase." },
+    { emoji: "⚙️", title: "Customize", body: "Use Settings to change theme, voice, and what appears on the board." },
+    { emoji: "👤", title: "Add Profiles", body: "Create a profile for each user with their own settings." },
+];
 
 export const WelcomeBanner = ({ onDismiss }) => {
     const [visible, setVisible] = useState(true);
+    const t = getActiveTheme();
 
     const handleDismiss = () => {
         setVisible(false);
@@ -12,67 +20,94 @@ export const WelcomeBanner = ({ onDismiss }) => {
     if (!visible) return null;
 
     return (
-        <div style={styles.banner}>
-            <div style={styles.content}>
-                <p style={styles.heading}>👋 Welcome to Mochi</p>
-                <div style={styles.tips}>
-                    <span style={styles.tip}>👆 Tap a symbol to start talking</span>
-                    <span style={styles.tip}>⚙️ Use Settings to personalize Mochi</span>
-                    <span style={styles.tip}>👤 Add profiles for each user</span>
-                </div>
+        <div style={styles.overlay}>
+            <div style={{ ...styles.banner, backgroundColor: t.card, borderColor: t.border }}>
+                <p style={{ ...styles.title, color: t.heading }}>👋 Welcome to Mochi!</p>
+                <p style={{ ...styles.subtitle, color: t.text }}>Here are a few tips to get started:</p>
+
+                {TIPS.map((tip) => (
+                    <div key={tip.title} style={styles.tip}>
+                        <span style={styles.tipEmoji}>{tip.emoji}</span>
+                        <div style={styles.tipContent}>
+                            <p style={{ ...styles.tipTitle, color: t.heading }}>{tip.title}</p>
+                            <p style={{ ...styles.tipBody, color: t.text }}>{tip.body}</p>
+                        </div>
+                    </div>
+                ))}
+
+                <button onClick={handleDismiss} style={{ ...styles.dismissButton, backgroundColor: t.heading }}>
+                    Got it ✓
+                </button>
             </div>
-            <button onClick={handleDismiss} style={styles.dismissButton}>
-                Got it ✓
-            </button>
         </div>
     );
 };
 
 const styles = {
-    banner: {
-        backgroundColor: "#fffbeb",
-        border: "2px solid #fcd34d",
-        borderRadius: "16px",
-        padding: "1rem",
-        marginBottom: "1rem",
+    overlay: {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0,0,0,0.5)",
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
-        gap: "1rem",
-        flexWrap: "wrap",
-        animation: "fadeIn 0.4s ease forwards",
+        justifyContent: "center",
+        zIndex: 300,
+        padding: "1.5rem",
     },
-    content: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.4rem",
-        flex: 1,
+    banner: {
+        borderRadius: "24px",
+        padding: "1.5rem",
+        width: "100%",
+        maxWidth: "420px",
+        border: "2px solid",
+        boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+        animation: "fadeIn 0.3s ease forwards",
     },
-    heading: {
-        fontSize: "1rem",
-        fontWeight: "700",
-        color: "#92400e",
-        margin: 0,
+    title: {
+        fontSize: "1.4rem",
+        fontWeight: "800",
+        margin: "0 0 0.25rem 0",
+        textAlign: "center",
     },
-    tips: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.2rem",
+    subtitle: {
+        fontSize: "0.9rem",
+        textAlign: "center",
+        margin: "0 0 1.25rem 0",
     },
     tip: {
+        display: "flex",
+        alignItems: "flex-start",
+        gap: "0.75rem",
+        marginBottom: "1rem",
+    },
+    tipEmoji: {
+        fontSize: "1.5rem",
+    },
+    tipContent: {
+        flex: 1,
+    },
+    tipTitle: {
+        fontSize: "0.95rem",
+        fontWeight: "700",
+        margin: "0 0 0.1rem 0",
+    },
+    tipBody: {
         fontSize: "0.85rem",
-        color: "#78350f",
+        lineHeight: "1.4",
+        margin: 0,
     },
     dismissButton: {
-        minHeight: "44px",
-        padding: "0.5rem 1.25rem",
-        borderRadius: "12px",
+        width: "100%",
+        marginTop: "0.5rem",
+        padding: "0.9rem",
+        borderRadius: "50px",
         border: "none",
-        backgroundColor: "#002366",
         color: "#ffffff",
-        fontWeight: "700",
+        fontWeight: "800",
+        fontSize: "1rem",
         cursor: "pointer",
-        fontSize: "0.9rem",
-        flexShrink: 0,
     },
 };
